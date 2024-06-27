@@ -1,13 +1,12 @@
 import './App.css'
+import MonthlyView from './Pages/MonthlyView'
 
 function App() {
 
   return (
-    <>
       <div>
-        Check Mate!
+        <MonthlyView />
       </div>
-    </>
   )
 }
 
