@@ -2,11 +2,25 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/esm/Button";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { StateContext } from "../StateContext";
 
 const TaskForm = () => {
+    const {currentDate} = useContext(StateContext);
+
     const [task, setTask] = useState("");
     const [date, setDate] = useState();
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+    console.log(currentDate);
+
+    console.log(formatDate(currentDate));
 
     const saveTask = (event) => {
         event.prevent.default();
@@ -35,7 +49,7 @@ const TaskForm = () => {
                 <Col sm="10">
                     <Form.Control 
                     type="date" 
-                    defaultValue="2024-07-09"
+                    defaultValue={formatDate(currentDate)}
                     onChange={e => setDate(e.target.value)}
                     value={date}
                     />
