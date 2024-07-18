@@ -1,19 +1,28 @@
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
 import PropTypes from "prop-types";
+import { useEffect, useContext, useState } from "react";
+import { StateContext } from "../StateContext";
 
 const DayCard = ({ title, setModalShow }) => {
-  return (
-    <Card className="bg-light">
-      <Card.Title onClick={() => setModalShow(true)}>
-        <h1>{title}</h1>
-      </Card.Title>
+  const {tasks} = useContext(StateContext);
 
-      <Card.Body>
-        <Card.Text>
-          <Badge pill bg="success">3 <i className="bi bi-check2"></i></Badge>
-          <Badge pill bg="danger">2 <i className="bi bi-x-lg"></i></Badge>
-        </Card.Text>
+  const [finishedCounter, setFinishedCounter] = useState(1);
+  const [unfinishedCounter, setUnfinishedCounter] = useState(3);
+
+  useEffect(() => {
+    const dailyTasks = tasks.filter(task => task.date === title)
+  }, [])
+  
+
+  return (
+    <Card className="day-card bg-light">
+      <Card.Body onClick={() => setModalShow(true)}>
+        <h1>{title}</h1>
+        {finishedCounter > 0 ?      
+          <Badge pill bg="success">{finishedCounter} <i className="bi bi-check2"></i></Badge> : null}
+        {unfinishedCounter > 0 ?  
+          <Badge pill bg="danger">{unfinishedCounter} <i className="bi bi-x-lg"></i></Badge> : null}
       </Card.Body>
     </Card>
   )
