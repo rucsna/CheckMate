@@ -6,8 +6,8 @@ import DailyView from "./DailyView";
 import AddTaskModal from "../Components/AddTaskModal";
 import { StateContext } from "../StateContext";
 
-const monthLengthCounter = (month, year) => {
-    return new Date(year, month + 1, 0).getDate();
+const monthLengthCounter = (month, year, day) => {
+    return new Date(year, month, day).getDate();
 };
 
 const getMonthName = (monthNumber) => {
@@ -20,7 +20,7 @@ const getMonthName = (monthNumber) => {
 const MonthlyView = () => {
     const { weekStart, currentDate } = useContext(StateContext);
 
-    const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth(), currentDate.getFullYear()));
+    const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth() + 1, currentDate.getFullYear(), 0));
     const [startDay, setStartDay] = useState(0);
     const [weekNumber, setWeekNumber] = useState(31);
     const [selectedMonth, setSelectedMonth] = useState(getMonthName(currentDate.getMonth()));
@@ -38,10 +38,10 @@ const MonthlyView = () => {
     let current = weekNumber;
 
     const handleMonthChange = (monthIndex) => {
+        const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, 2024, 0);
         setSelectedMonth(getMonthName(monthIndex));
-        console.log('index', monthIndex);
-
-        setDaysInTheMonth(monthLengthCounter(monthIndex, 2024));
+        
+        setDaysInTheMonth(lengthOfMonth);
     };
 
     useEffect(() => {
