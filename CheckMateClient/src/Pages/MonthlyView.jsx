@@ -1,60 +1,60 @@
-import DayCard from "../Components/DayCard";
 import Layout from "./Layout";
-import Table from "react-bootstrap/Table";
 import { useState, useEffect, useContext } from "react";
 import DailyView from "./DailyView";
 import AddTaskModal from "../Components/AddTaskModal";
 import { StateContext } from "../StateContext";
+import MonthTable from "../Components/MonthTable";
 
-const monthLengthCounter = (month, year, day) => {
-    return new Date(year, month, day).getDate();
-};
 
-const getMonthName = (monthNumber) => {
-    const date = new Date();
-    date.setMonth(monthNumber);
+// Initializing functions for dates
+const monthLengthCounter = (month, year) => new Date(year, month, 0).getDate();
 
-    return date.toLocaleString('en-US', {month: 'long'});
-};
+const getStartDay = (month, year, day) => new Date(year, month, day).getDay();
+
+const getMonthName = (month) => new Date(1970, month, 1).toLocaleString('en-US', { month: 'long' });
+
+const getWeekNumber = (month, year) => {
+    var currDate = new Date(year, month, 1);
+    var oneJan = new Date(year, 0, 1);
+    var numberOfDays = Math.floor((currDate - oneJan) / (24 * 60 * 60 * 1000));
+    return Math.ceil((currDate.getDay() + 1 + numberOfDays) / 7);
+}
 
 const MonthlyView = () => {
-    const { weekStart, currentDate } = useContext(StateContext);
+    const { weekStart, currentDate, setSelectedMonth, selectedMonth, selectedYear } = useContext(StateContext);
 
-    const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth() + 1, currentDate.getFullYear(), 0));
+    const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth() + 1, currentDate.getFullYear()));
     const [startDay, setStartDay] = useState(0);
-    const [weekNumber, setWeekNumber] = useState(31);
-    const [selectedMonth, setSelectedMonth] = useState(getMonthName(currentDate.getMonth()));
+    const [startDayIfMonday, setStartDayIfMonday] = useState(getStartDay(currentDate.getMonth(), currentDate.getFullYear(), 1) - 1);
+    const [startDayIfSunday, setStartDayIfSunday] = useState(getStartDay(currentDate.getMonth(), currentDate.getFullYear(), 1));
+    const [weekNumber, setWeekNumber] = useState(getWeekNumber(currentDate.getMonth(), currentDate.getFullYear()));
 
     const [dailyViewShow, setDailyViewShow] = useState(false);
     const [addTaskShow, setAddTaskShow] = useState(false);
 
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thirsday", "Friday", "Saturday"];
-    const headers = weekStart === "M"
-        ? [...days.slice(1), days[0]]
-        : days;
-
-    const totalCells = daysInTheMonth + startDay;
-    const totalRows = Math.ceil(totalCells / 7);
-    let current = weekNumber;
-
-    const handleMonthChange = (monthIndex) => {
-        const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, 2024, 0);
-        setSelectedMonth(getMonthName(monthIndex));
-        
-        setDaysInTheMonth(lengthOfMonth);
-    };
 
     useEffect(() => {
         if (weekStart === "M") {
-            setStartDay(0);
+            setStartDay(startDayIfMonday);
         } else {
-            setStartDay(0 + 1);
+            setStartDay(startDayIfSunday);
         }
+    }, [weekStart, startDay, startDayIfMonday, startDayIfSunday]);
 
-        //setDaysInTheMonth(monthLengthCounter(2, 2024));
-        // this useEffect will set the
-        //      daysInTheMonth, startDay, weekNumber states upon first rendering
-    }, [weekStart]);
+
+    const handleMonthChange = (monthIndex) => {
+        const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, selectedYear);
+        const day1 = getStartDay(Number(monthIndex), selectedYear, 1) - 1;
+        const day2 = getStartDay(Number(monthIndex), selectedYear, 1);
+
+        day1 < 0 ? setStartDayIfMonday(6) : setStartDayIfMonday(day1);
+        setStartDayIfSunday(day2);
+        weekStart === "M" ? setStartDay(startDayIfMonday) : setStartDay(startDayIfSunday);
+
+        setSelectedMonth(getMonthName(monthIndex));
+        setWeekNumber(getWeekNumber(monthIndex, selectedYear));
+        setDaysInTheMonth(lengthOfMonth);
+    };
 
 
     return (
@@ -63,43 +63,22 @@ const MonthlyView = () => {
                 {{
                     component: (
                         <div className="table-wrapper">
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th><i className="bi bi-calendar-check"></i></th>
-                                        {headers.map((day, index) => (
-                                            <th key={index++} className="text-info">{day}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        Array.from({ length: totalRows }, (_, rowIndex) => (
-                                            <tr key={rowIndex}>
-                                                <td className="text-info">{current++}</td>
-                                                {
-                                                    Array.from({ length: 7 }, (_, colIndex) => {
-                                                        const dayIndex = rowIndex * 7 + colIndex;
-                                                        const dayNumber = dayIndex - startDay + 1;
-                                                        if (dayIndex < startDay || dayNumber > daysInTheMonth) return <td key={colIndex}></td>;
-                                                        return (
-                                                            <td className="col-lg-2 col-md-2 col-sm-2 mb-6" key={colIndex}>
-                                                                <DayCard className="day-card" title={dayNumber} setModalShow={setDailyViewShow} />
-                                                            </td>
-                                                        );
-                                                    })
-                                                }
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </Table>
+                            <MonthTable
+                                daysInTheMonth={daysInTheMonth}
+                                startDay={startDay}
+                                weekNumber={weekNumber}
+                                setDailyViewShow={setDailyViewShow}
+                            />
+
                             <DailyView show={dailyViewShow} onHide={() => setDailyViewShow(false)} />
                             <AddTaskModal show={addTaskShow} onHide={() => setAddTaskShow(false)} />
+
                         </div>
                     ),
+
                     setDailyViewShow: setDailyViewShow,
                     setAddTaskShow: setAddTaskShow,
+                    setStartDay: setStartDay
                 }}
             </Layout>
         </div>
