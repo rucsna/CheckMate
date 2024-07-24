@@ -5,19 +5,27 @@ import { useEffect, useContext, useState } from "react";
 import { StateContext } from "../StateContext";
 
 const DayCard = ({ title, setModalShow }) => {
-  const {tasks} = useContext(StateContext);
+  const {tasks, setSelectedDay, setIsToday, currentDate, getMonthName, selectedYear, selectedMonth, selectedDay} = useContext(StateContext);
 
   const [finishedCounter, setFinishedCounter] = useState(1);
   const [unfinishedCounter, setUnfinishedCounter] = useState(3);
+
+  const curr = `${currentDate.getFullYear()}.${getMonthName(currentDate.getMonth())}.${currentDate.getDate()}`;
+  const selected = `${selectedYear}.${selectedMonth}.${title}`;
 
   useEffect(() => {
     const dailyTasks = tasks.filter(task => task.date === title)
   }, [])
   
+  const handleClick = () => {
+    setSelectedDay(title);
+    setIsToday(false);
+    setModalShow(true);
+  };
 
   return (
-    <Card className="day-card bg-light">
-      <Card.Body onClick={() => setModalShow(true)}>
+    <Card className={`day-card ${curr === selected ? "bg-warning" : "bg-warning-subtle"} shadow`}>
+      <Card.Body onClick={handleClick}>
         <h1>{title}</h1>
         {finishedCounter > 0 ?      
           <Badge pill bg="success">{finishedCounter} <i className="bi bi-check2"></i></Badge> : null}
