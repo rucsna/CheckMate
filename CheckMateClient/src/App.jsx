@@ -6,7 +6,7 @@ function App() {
 
   return (
     <ContextProvider>
-      <div>
+      <div className='bg-info bg-opacity-25'>
         <MonthlyView />
       </div>
     </ContextProvider>
