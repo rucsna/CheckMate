@@ -4,27 +4,38 @@ import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TaskList from "../Components/TaskList";
 import TaskForm from "../Components/TaskForm";
+import { StateContext } from "../StateContext";
 
 const DailyView = (props) => {
+    const { selectedDay, selectedMonth, currentDate, getMonthName, isToday } = useContext(StateContext);
     const [hideForm, setHideForm] = useState(true);
-    const [tasks, setTasks] = useState([
-        { id: 0, name: "feed the cat", completed: false },
-        { id: 1, name: "drink more water", completed: false },
-        { id: 2, name: "lunch", completed: true },
-        { id: 3, name: "call the plumber", completed: false }]);
+    const [title, setTitle] = useState("");
 
+    
     useEffect(() => {
+        if(isToday === true){
+            setTitle(() => setModalTitle(getMonthName(currentDate.getMonth()), currentDate.getDate()));    
+        } else {
+            setTitle(() => setModalTitle(selectedMonth, selectedDay));
+        }
         setHideForm(true);
-        // here the tasks will be fetched from the backend and sorted according to their completed status
-    }, []);
+    }, [selectedDay, selectedMonth, isToday]);
 
     const closeModal = () => {
         setHideForm(true);
         props.onHide();
-    }
+    };
+
+    const setModalTitle = (month, day) => {
+        let dayEnding = day == 1 || day == 21 || day == 31 ? 'st' :
+                        day == 2 || day == 22 ? 'nd' : 
+                        day == 3 || day == 23 ? 'rd' :
+                        'th';
+        return `${day}${dayEnding} ${month}`;
+    };
 
     return (
         <Modal
@@ -33,15 +44,16 @@ const DailyView = (props) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header>
+
+            <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    <h1 className="text-info">{props.daynumber}</h1>
+                    <h1 className="text-info">{title}</h1>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="bg-warning">
                 <h4>Tasks for today</h4>
                 <Container>
-                    <TaskList tasks={tasks} />
+                    <TaskList />
                 </Container>
                 {!hideForm &&
                     <Alert variant="info" onClose={() => setHideForm(true)} dismissible>
@@ -59,6 +71,7 @@ const DailyView = (props) => {
                     </Col>
                 </Row>
             </Modal.Footer>
+
         </Modal>
     )
 }
