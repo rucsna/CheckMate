@@ -2,15 +2,13 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import ListGroup from "react-bootstrap/ListGroup";
 import FormCheck from "react-bootstrap/FormCheck";
 import { useContext, useState } from "react";
-import { StateContext } from "../StateContext";
+import { DateContext } from "../Contexts/DateContext";
 
 const Footer = () => {
-    const {weekStart, setWeekStart} = useContext(StateContext);
+    const {weekStart, setWeekStart} = useContext(DateContext);
 
     const [show, setShow] = useState(false);
-    const [sillyLabel, setSillyLabel] = useState("Choose me!!!");
-
-    console.log('week start', weekStart);
+    //const [sillyLabel, setSillyLabel] = useState("Choose me!!!");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -20,8 +18,8 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-info">
-            <i className="bi bi-gear" onClick={handleShow}> Settings</i>
+        <footer className="bg-success bg-opacity-75">
+            <i className="bi bi-gear ms-5" onClick={handleShow}> Settings</i>
 
             <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
@@ -50,12 +48,12 @@ const Footer = () => {
                                 name="mode-group"
                                 label="Strict mode"
                             />
-                            <FormCheck
+                            {/* <FormCheck
                                 type="radio"
                                 id="normal"
                                 name="mode-group"
                                 label="Silly mode"
-                            />
+                            /> */}
                         </ListGroup.Item>
                     </ListGroup>
                 </Offcanvas.Body>
