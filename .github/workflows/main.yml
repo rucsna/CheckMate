@@ -23,15 +23,18 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: CheckMateClient
 
       - name: Run tests
         run: npm test
+        working-directory: CheckMateClient
 
       - name: Build project
         run: npm run build
+        working-directory: CheckMateClient
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: dist
+          path: CheckMateClient/dist
