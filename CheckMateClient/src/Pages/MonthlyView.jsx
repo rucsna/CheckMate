@@ -2,16 +2,15 @@ import Layout from "./Layout";
 import { useState, useEffect, useContext } from "react";
 import DailyView from "./DailyView";
 import AddTaskModal from "../Components/AddTaskModal";
-import { StateContext } from "../StateContext";
+import { DateContext } from "../Contexts/DateContext";
 import MonthTable from "../Components/MonthTable";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 
 // Initializing functions for dates
 const monthLengthCounter = (month, year) => new Date(year, month, 0).getDate();
 
 const getStartDay = (month, year, day) => new Date(year, month, day).getDay();
-
-const getMonthName = (month) => new Date(1970, month, 1).toLocaleString('en-US', { month: 'long' });
 
 const getWeekNumber = (month, year) => {
     var currDate = new Date(year, month, 1);
@@ -20,8 +19,10 @@ const getWeekNumber = (month, year) => {
     return Math.ceil((currDate.getDay() + 1 + numberOfDays) / 7);
 }
 
+
 const MonthlyView = () => {
-    const { weekStart, currentDate, setSelectedMonth, selectedMonth, selectedYear } = useContext(StateContext);
+    const { currentDate, setSelectedMonth, selectedMonth, selectedYear, getMonthName } = useContext(DateContext);
+    const { weekStart } = useContext(SettingsContext);
 
     const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth() + 1, currentDate.getFullYear()));
     const [startDay, setStartDay] = useState(0);
@@ -42,17 +43,17 @@ const MonthlyView = () => {
     }, [weekStart, startDay, startDayIfMonday, startDayIfSunday]);
 
 
-    const handleMonthChange = (monthIndex) => {
+    const handleMonthChange = (monthIndex, year = selectedYear) => {
         const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, selectedYear);
-        const day1 = getStartDay(Number(monthIndex), selectedYear, 1) - 1;
-        const day2 = getStartDay(Number(monthIndex), selectedYear, 1);
+        const day1 = getStartDay(Number(monthIndex), year, 1) - 1;
+        const day2 = getStartDay(Number(monthIndex), year, 1);
 
         day1 < 0 ? setStartDayIfMonday(6) : setStartDayIfMonday(day1);
         setStartDayIfSunday(day2);
         weekStart === "M" ? setStartDay(startDayIfMonday) : setStartDay(startDayIfSunday);
-
+       
         setSelectedMonth(getMonthName(monthIndex));
-        setWeekNumber(getWeekNumber(monthIndex, selectedYear));
+        setWeekNumber(getWeekNumber(monthIndex, year));
         setDaysInTheMonth(lengthOfMonth);
     };
 
@@ -78,7 +79,7 @@ const MonthlyView = () => {
 
                     setDailyViewShow: setDailyViewShow,
                     setAddTaskShow: setAddTaskShow,
-                    setStartDay: setStartDay
+                    setStartDay: setStartDay,
                 }}
             </Layout>
         </div>

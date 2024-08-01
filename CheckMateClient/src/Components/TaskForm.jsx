@@ -3,10 +3,10 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/esm/Button";
 import { useState, useContext } from "react";
-import { StateContext } from "../StateContext";
+import { DateContext } from "../Contexts/DateContext";
 
 const TaskForm = () => {
-    const {currentDate} = useContext(StateContext);
+    const {currentDate} = useContext(DateContext);
 
     const [task, setTask] = useState("");
     const [date, setDate] = useState();

@@ -7,10 +7,10 @@ import Alert from "react-bootstrap/Alert";
 import { useState, useEffect, useContext } from "react";
 import TaskList from "../Components/TaskList";
 import TaskForm from "../Components/TaskForm";
-import { StateContext } from "../StateContext";
+import { DateContext } from "../Contexts/DateContext";
 
 const DailyView = (props) => {
-    const { selectedDay, selectedMonth, currentDate, getMonthName, isToday } = useContext(StateContext);
+    const { selectedDay, selectedMonth, currentDate, getMonthName, isToday } = useContext(DateContext);
     const [hideForm, setHideForm] = useState(true);
     const [title, setTitle] = useState("");
 
