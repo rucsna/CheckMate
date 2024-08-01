@@ -396,3 +396,15 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# .NET Minimal API
+/bin/
+/obj/
+*.csproj.user
+*.rsuser
+appsettings.Development.json
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3

@@ -1,14 +1,16 @@
-import './App.css'
+import './App.css';
+import MonthlyView from './Pages/MonthlyView';
+import { ContextProvider } from './StateContext';
 
 function App() {
 
   return (
-    <>
-      <div>
-        Check Mate!
+    <ContextProvider>
+      <div className='bg-info bg-opacity-25'>
+        <MonthlyView />
       </div>
-    </>
+    </ContextProvider>
   )
-}
+};
 
-export default App
+export default App;
