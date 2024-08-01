@@ -403,6 +403,7 @@ FodyWeavers.xsd
 *.csproj.user
 *.rsuser
 appsettings.Development.json
+.idea
 
 # SQLite
 *.db
