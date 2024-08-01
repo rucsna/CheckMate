@@ -1,15 +1,21 @@
 import './App.css';
 import MonthlyView from './Pages/MonthlyView';
-import { ContextProvider } from './StateContext';
+import { DateProvider } from './Contexts/DateContext';
+import { TaskProvider } from './Contexts/TaskContext';
+import { SettingsProvider } from './Contexts/SettingsContext';
 
 function App() {
 
   return (
-    <ContextProvider>
-      <div className='bg-info bg-opacity-25'>
-        <MonthlyView />
-      </div>
-    </ContextProvider>
+    <SettingsProvider>
+      <DateProvider>
+        <TaskProvider>
+          <div className='bg-success bg-opacity-25'>
+            <MonthlyView />
+          </div>
+        </TaskProvider>
+      </DateProvider>
+    </SettingsProvider>
   )
 };
 
