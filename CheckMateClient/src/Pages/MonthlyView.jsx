@@ -44,7 +44,7 @@ const MonthlyView = () => {
 
 
     const handleMonthChange = (monthIndex, year = selectedYear) => {
-        const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, selectedYear);
+        const lengthOfMonth = monthLengthCounter(Number(monthIndex) + 1, year);
         const day1 = getStartDay(Number(monthIndex), year, 1) - 1;
         const day2 = getStartDay(Number(monthIndex), year, 1);
 

@@ -10,9 +10,10 @@ import TaskForm from "../Components/TaskForm";
 import { DateContext } from "../Contexts/DateContext";
 
 const DailyView = (props) => {
-    const { selectedDay, selectedMonth, currentDate, getMonthName, isToday } = useContext(DateContext);
+    const { selectedDay, selectedMonth, selectedYear, currentDate, getMonthName, isToday } = useContext(DateContext);
     const [hideForm, setHideForm] = useState(true);
     const [title, setTitle] = useState("");
+    const [todaysTasks, setTodaysTasks] = useState([]);
 
     
     useEffect(() => {
@@ -23,6 +24,35 @@ const DailyView = (props) => {
         }
         setHideForm(true);
     }, [selectedDay, selectedMonth, isToday]);
+
+    useEffect(() => {
+        let date = "";
+        const selected = `${selectedYear}-${selectedMonth}-${selectedDay}`;
+        isToday ? date = currentDate.toISOString().slice(0, 10) : date = selected;
+        const fetchTasks = async () => {
+            try {
+                const response = await fetch(`http://localhost:5295/api/todos/${date}`);
+                if(!response.ok){
+                    throw new Error("Problem with network response");
+                }
+                const taskData = await response.json();
+                if(taskData){
+                    console.log(taskData);
+                    setTodaysTasks(taskData);
+                } else{
+                    // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
+                    // setShowToast(true);
+                }
+            } catch (error) {
+                // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
+                // setShowToast(true);
+                // console.error(error);
+            };
+          };
+          fetchTasks();
+    }, [selectedDay, selectedMonth, selectedYear, isToday]);
+    
+    console.log('todays', todaysTasks);
 
     const closeModal = () => {
         setHideForm(true);
@@ -53,7 +83,7 @@ const DailyView = (props) => {
             <Modal.Body className="bg-warning">
                 <h4>Tasks for today</h4>
                 <Container>
-                    <TaskList />
+                    <TaskList tasks={todaysTasks}/>
                 </Container>
                 {!hideForm &&
                     <Alert variant="info" onClose={() => setHideForm(true)} dismissible>

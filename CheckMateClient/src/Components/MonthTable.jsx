@@ -34,11 +34,11 @@ const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) =>
                                 {
                                     Array.from({ length: 7 }, (_, colIndex) => {
                                         const dayIndex = rowIndex * 7 + colIndex;
-                                        const dayNumber = dayIndex - startDay + 1;
-                                        if (dayIndex < startDay || dayNumber > daysInTheMonth) return <td key={colIndex}></td>;
+                                        const currentDay = dayIndex - startDay + 1;
+                                        if (dayIndex < startDay || currentDay > daysInTheMonth) return <td key={colIndex}></td>;
                                         return (
                                             <td className="col-lg-2 col-md-2 col-sm-2 mb-6" key={colIndex}>
-                                                <DayCard className="day-card" title={dayNumber} setModalShow={setDailyViewShow} />
+                                                <DayCard className="day-card" currentDay={currentDay} setModalShow={setDailyViewShow} />
                                             </td>
                                         );
                                     })

@@ -18,9 +18,9 @@ const TaskForm = () => {
 
         return `${year}-${month}-${day}`;
     };
-    console.log(currentDate);
+    //console.log(currentDate);
 
-    console.log(formatDate(currentDate));
+    //console.log(formatDate(currentDate));
 
     const saveTask = (event) => {
         event.prevent.default();
