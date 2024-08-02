@@ -1,28 +1,26 @@
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
-import { useContext } from "react";
-import { StateContext } from "../StateContext";
+import { useState, useEffect } from "react";
 
 const TaskList = () => {
-    const { tasks, setTasks } = useContext(StateContext);
+    const [tasksByDate, setTasksByDate] = useState([
+        { id: 0, name: "feed the cat", completed: false, date: "2024.07.27" },
+        { id: 2, name: "lunch", completed: true, date: "2024.07.27" },
+    ]);
+
+    useEffect(() => {
+      // get tasks by date!
+    }, [])
+    
 
     const handleTask = (id) => {
-        console.log('id', id);
-        const changedTasks = tasks.map(task => {
-            if (task.id === id) {
-                console.log(task.id);
-                return { ...task, completed: !task.completed };
-            };
-            return task;
-        });
-
-        setTasks(changedTasks);
+        // update task by id!
     };
 
     return (
         <ListGroup>
             {
-                tasks.map((task) => (
+                tasksByDate.map((task) => (
                     <ListGroup.Item key={task.id}>
                         <Form className="d-flex align-items-center">
                             <Form.Check
