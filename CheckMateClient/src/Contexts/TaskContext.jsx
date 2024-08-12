@@ -3,25 +3,24 @@ import { DateContext } from "./DateContext";
 
 export const TaskContext = createContext();
 
-export const TaskProvider = ({children}) => {
-    const {selectedYear, selectedMonth, getMonthNumberFromName} = useContext(DateContext);
+export const TaskProvider = ({ children }) => {
+    const { selectedYear, selectedMonth, getMonthNumberFromName } = useContext(DateContext);
 
     const [tasks, setTasks] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [showToast, setShowToast] = useState(false);
 
-    useEffect(() => {
-      const fetchTasks = async () => {
+    const fetchTasks = async () => {
         try {
             const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${getMonthNumberFromName(selectedMonth)}`);
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error("Problem with network response");
             }
             const taskData = await response.json();
-            if(taskData){
+            if (taskData) {
                 console.log(taskData);
                 setTasks(taskData);
-            } else{
+            } else {
                 setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
                 setShowToast(true);
             }
@@ -30,14 +29,16 @@ export const TaskProvider = ({children}) => {
             setShowToast(true);
             console.error(error);
         };
-      };
-      fetchTasks();
-      setShowToast(false);
-    }, [selectedMonth, selectedYear]);
-    
+    };
 
-    return(
-        <TaskContext.Provider value={{tasks}}>
+    useEffect(() => {
+        fetchTasks();
+        setShowToast(false);
+    }, [selectedMonth, selectedYear]);
+
+
+    return (
+        <TaskContext.Provider value={{ tasks, fetchTasks }}>
             {children}
         </TaskContext.Provider>
     );
