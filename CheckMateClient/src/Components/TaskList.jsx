@@ -1,15 +1,41 @@
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
+import { useContext } from "react";
+import { TaskContext } from "../Contexts/TaskContext";
 
-const TaskList = ({tasks}) => {
-    // const [tasksByDate, setTasksByDate] = useState([
-    //     { id: 0, name: "feed the cat", completed: false, date: "2024.07.27" },
-    //     { id: 2, name: "lunch", completed: true, date: "2024.07.27" },
-    // ]);
-    
-    console.log(tasks);
-    const handleTask = (id) => {
-        // update task by id!
+const TaskList = ({ tasks, setTasks }) => {
+    const {fetchTasks} = useContext(TaskContext);
+
+    const handleTask = async (id, isCompleted) => {
+        const updatedTask = tasks.find(t => t.id === id);
+        if (updatedTask) {
+            updatedTask.isCompleted = !isCompleted;
+        }
+        console.log(updatedTask);
+
+        try {
+            const response = await fetch(`http://localhost:5295/api/todos/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedTask)
+            });
+            if (response.ok) {
+                console.log("task successfully updated");
+
+                const updatedResponse = await fetch(`http://localhost:5295/api/todos/${id}`);
+                if (updatedResponse.ok) {
+                    const taskData = await updatedResponse.json();
+                    setTasks(prevTasks => prevTasks.map(task => task.id === id ? taskData : task));
+                } else {
+                    console.error("error fetching updated task");
+                }
+            } else {
+                console.error("error updating task", response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error("internal server error", error);
+        }
+        fetchTasks();
     };
 
     return (
@@ -23,8 +49,7 @@ const TaskList = ({tasks}) => {
                                 id={`task-${task.id}`}
                                 label={task.name}
                                 checked={task.isCompleted}
-                                disabled={task.isCompleted}
-                                onChange={() => handleTask(task.id)}
+                                onChange={() => handleTask(task.id, task.isCompleted)}
                             />
                             <i className="bi bi-pencil-square ms-auto me-2"></i>
                             <i className="bi bi-trash3-fill me-2"></i>
