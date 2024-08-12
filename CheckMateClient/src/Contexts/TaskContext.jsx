@@ -1,23 +1,44 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { DateContext } from "./DateContext";
 
 export const TaskContext = createContext();
 
-export const TaskProvider = ({children}) => {
-    const [tasks, setTasks] = useState([
-        { id: 0, name: "feed the cat", completed: false, date: "2024.07.03" },
-        { id: 1, name: "drink more water", completed: true, date: "2024.07.05"},
-        { id: 2, name: "lunch", completed: true, date: "2024.07.03" },
-        { id: 3, name: "call the plumber", completed: false, date: "2024.07.25" },
-        { id: 4, name: "feed the dog, too", completed: true, date: "2024.07.27" },
-        { id: 5, name: "go for a run", completed: false, date: "2024.07.27" },
-        { id: 6, name: "practice English", completed: false, date: "2024.07.03" },
-        { id: 7, name: "call Granny", completed: true, date: "2024.07.11"},
-        { id: 8, name: "shopping", completed: true, date: "2024.07.03" },
-        { id: 9, name: "pay the bills", completed: false, date: "2024.07.29" },
-    ]);
+export const TaskProvider = ({ children }) => {
+    const { selectedYear, selectedMonth, getMonthNumberFromName } = useContext(DateContext);
 
-    return(
-        <TaskContext.Provider value={{tasks}}>
+    const [tasks, setTasks] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);
+
+    const fetchTasks = async () => {
+        try {
+            const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${getMonthNumberFromName(selectedMonth)}`);
+            if (!response.ok) {
+                throw new Error("Problem with network response");
+            }
+            const taskData = await response.json();
+            if (taskData) {
+                console.log(taskData);
+                setTasks(taskData);
+            } else {
+                setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
+                setShowToast(true);
+            }
+        } catch (error) {
+            setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
+            setShowToast(true);
+            console.error(error);
+        };
+    };
+
+    useEffect(() => {
+        fetchTasks();
+        setShowToast(false);
+    }, [selectedMonth, selectedYear]);
+
+
+    return (
+        <TaskContext.Provider value={{ tasks, fetchTasks }}>
             {children}
         </TaskContext.Provider>
     );

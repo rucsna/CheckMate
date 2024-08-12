@@ -8,31 +8,46 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { TaskContext } from "../Contexts/TaskContext";
 
 
-const DayCard = ({ title, setModalShow }) => {
+const DayCard = ({ currentDay, setModalShow }) => {
   const { setSelectedDay, setIsToday, currentDate, getMonthName, selectedYear, selectedMonth } = useContext(DateContext);
   const {tasks} = useContext(TaskContext);
 
+  const [currentDateAsString, setCurrentDateAsString] = useState("");
+  const [selectedDateAsString, setSelectedDateAsString] = useState("");
+
   const [finishedCounter, setFinishedCounter] = useState(0);
   const [unfinishedCounter, setUnfinishedCounter] = useState(0);
-  const [dailyTasks, setDailyTasks] = useState(tasks.filter(task => Number(task.date.slice(-2)) === title));
+  const [dailyTasks, setDailyTasks] = useState([]);
 
-  const curr = `${currentDate.getFullYear()}.${getMonthName(currentDate.getMonth())}.${currentDate.getDate()}`;
-  const selected = `${selectedYear}.${selectedMonth}.${title}`;
 
   useEffect(() => {
-    setFinishedCounter(dailyTasks.filter(task => task.completed === true).length);
-    setUnfinishedCounter(dailyTasks.filter(task => task.completed === false).length);
-  }, [tasks, setDailyTasks, dailyTasks, title]);
+    const currentDateString = `${currentDate.getFullYear()}-${getMonthName(currentDate.getMonth())}-${currentDate.getDate()}`
+    setCurrentDateAsString(currentDateString);
+    const selectedDateString = `${selectedYear}-${selectedMonth}-${currentDay}`;
+    setSelectedDateAsString(selectedDateString);
+
+    const filteredTasks = tasks.filter(task => {
+      const taskDate = new Date(task.date);
+      const taskDateAsString = `${taskDate.getFullYear()}-${getMonthName(taskDate.getMonth())}-${taskDate.getDate()}`;
+      return taskDateAsString == selectedDateAsString;
+    });
+    setDailyTasks(filteredTasks);
+
+
+    setFinishedCounter(filteredTasks.filter(task => task.isCompleted === true).length);
+    setUnfinishedCounter(filteredTasks.filter(task => task.isCompleted === false).length);
+  }, [tasks, selectedYear, selectedMonth, currentDay, getMonthName]);
+
 
   const handleClick = () => {
-    setSelectedDay(title);
+    setSelectedDay(currentDay);
     setIsToday(false);
     setModalShow(true);
   };
 
   const renderTooltip = (props, finished) => {
     const names = dailyTasks
-      .filter(task => task.completed === finished)
+      .filter(task => task.isCompleted === finished)
       .map(task => task.name);
 
     return (
@@ -47,13 +62,13 @@ const DayCard = ({ title, setModalShow }) => {
   const unfinishedTasksTooltip = (props) => renderTooltip(props, false);
 
   return (
-    <Card className={`day-card ${curr === selected ? "bg-dark" : "bg-warning-subtle"} shadow`}>
+    <Card className={`day-card ${currentDateAsString === selectedDateAsString ? "bg-dark" : "bg-warning-subtle"} shadow`}>
       <Card.Body onClick={handleClick}>
-        <h1 className={`${curr === selected ? "text-warning" : "text-dark"}`}>{title}</h1>
+        <h1 className={`${currentDateAsString === selectedDateAsString ? "text-warning" : "text-dark"}`}>{currentDay}</h1>
         <div className="d-flex">
           {finishedCounter > 0 &&
             <OverlayTrigger placement="top" delay={{ show: 250, hide: 400 }} overlay={finishedTasksTooltip}>
-              <Badge bg={`${curr === selected ? "warning-subtle" : "primary"}`} className="text-primary bg-opacity-25">
+              <Badge bg={`${currentDateAsString === selectedDateAsString ? "warning-subtle" : "primary"}`} className="text-primary bg-opacity-25">
                 {finishedCounter}
                 <i className="bi bi-check2 text-primary"></i>
               </Badge>
@@ -71,7 +86,7 @@ const DayCard = ({ title, setModalShow }) => {
 };
 
 DayCard.propTypes = {
-  title: PropTypes.number.isRequired,
+  currentDay: PropTypes.number.isRequired,
   setModalShow: PropTypes.func.isRequired,
 };
 

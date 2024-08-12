@@ -2,13 +2,12 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import ListGroup from "react-bootstrap/ListGroup";
 import FormCheck from "react-bootstrap/FormCheck";
 import { useContext, useState } from "react";
-import { DateContext } from "../Contexts/DateContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 const Footer = () => {
-    const {weekStart, setWeekStart} = useContext(DateContext);
+    const {weekStart, setWeekStart, language, setLanguage, labels} = useContext(SettingsContext);
 
     const [show, setShow] = useState(false);
-    //const [sillyLabel, setSillyLabel] = useState("Choose me!!!");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -17,13 +16,14 @@ const Footer = () => {
         setWeekStart(prevStart => prevStart === "M" ? "S" : "M");
     };
 
+
     return (
         <footer className="bg-success bg-opacity-75">
-            <i className="bi bi-gear ms-5" onClick={handleShow}> Settings</i>
+            <i className="bi bi-gear ms-5" onClick={handleShow}> {labels.settings}</i>
 
             <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Settings</Offcanvas.Title>
+                    <Offcanvas.Title>{labels.settings}</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <ListGroup>
@@ -31,29 +31,43 @@ const Footer = () => {
                             <FormCheck 
                             type="switch" 
                             id="week-start-switch" 
-                            label={weekStart === "M" ? "Week starts with Monday" : "Week starts with Sunday"}
+                            label={weekStart === "M" ? `${labels.weekStartM}` : `${labels.weekStartS}`}
                             checked={weekStart === "M" ? false : true} 
                             onChange={handleWeekStartChange}></FormCheck>
                         </ListGroup.Item>
-                        <ListGroup.Item>Choose mode
+                        <ListGroup.Item>{labels.chooseLanguage}
                             <FormCheck
                                 type="radio"
                                 id="normal"
-                                name="mode-group"
-                                label="Normal mode"
+                                name="language-group"
+                                label="English"
+                                checked={language === "eng" ? true : false}
+                                onChange={() => setLanguage("eng")}
                             />
                             <FormCheck
                                 type="radio"
                                 id="normal"
-                                name="mode-group"
-                                label="Strict mode"
+                                name="language-group"
+                                label="Deutsch"
+                                checked={language === "ger" ? true : false}
+                                onChange={() => setLanguage("ger")}
                             />
-                            {/* <FormCheck
+                            <FormCheck
                                 type="radio"
                                 id="normal"
-                                name="mode-group"
-                                label="Silly mode"
-                            /> */}
+                                name="language-group"
+                                label="magyar"
+                                checked={language === "hun" ? true : false}
+                                onChange={() =>setLanguage("hun")}
+                            />
+                            <FormCheck
+                                type="radio"
+                                id="normal"
+                                name="language-group"
+                                label="한국인"
+                                checked={language === "kor" ? true : false}
+                                onChange={() => setLanguage("kor")}
+                            />
                         </ListGroup.Item>
                     </ListGroup>
                 </Offcanvas.Body>

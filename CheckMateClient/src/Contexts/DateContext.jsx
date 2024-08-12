@@ -10,6 +10,14 @@ export const DateProvider = ({children}) => {
         return new Date(`${monthName} 1, ${year}`).getMonth() + 1;
     };
 
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+    
+        return `${year}-${month}-${day}`;
+    };
+
     const currentDate = new Date();
     
     const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
@@ -33,6 +41,7 @@ export const DateProvider = ({children}) => {
             isToday,
             setIsToday,
             getMonthNumberFromName,
+            formatDate
             }}>
             {children}
         </DateContext.Provider>

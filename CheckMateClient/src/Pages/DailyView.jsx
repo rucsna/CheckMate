@@ -1,18 +1,41 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
 import { useState, useEffect, useContext } from "react";
 import TaskList from "../Components/TaskList";
 import TaskForm from "../Components/TaskForm";
 import { DateContext } from "../Contexts/DateContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
+
+
+const fetchTasksByDate = async (date, setter) => {
+    try {
+        const response = await fetch(`http://localhost:5295/api/todos/${date}`);
+        if(!response.ok){
+            throw new Error("Problem with network response");
+        }
+        const taskData = await response.json();
+        setter(taskData);
+        // } else{
+        //     // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
+        //     // setShowToast(true);
+        //}
+    } catch (error) {
+        // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
+        // setShowToast(true);
+        // console.error(error);
+    };
+  };
+
 
 const DailyView = (props) => {
-    const { selectedDay, selectedMonth, currentDate, getMonthName, isToday } = useContext(DateContext);
+    const { selectedDay, selectedMonth, selectedYear, currentDate, getMonthName, isToday, formatDate } = useContext(DateContext);
+    const {labels} = useContext(SettingsContext);
+
     const [hideForm, setHideForm] = useState(true);
     const [title, setTitle] = useState("");
+    const [todaysTasks, setTodaysTasks] = useState([]);
 
     
     useEffect(() => {
@@ -23,6 +46,13 @@ const DailyView = (props) => {
         }
         setHideForm(true);
     }, [selectedDay, selectedMonth, isToday]);
+
+    useEffect(() => {
+        const date = isToday ? currentDate.toISOString().slice(0, 10) : `${selectedYear}-${selectedMonth}-${selectedDay}`;
+        
+        fetchTasksByDate(date, setTodaysTasks);
+    }, [selectedDay, selectedMonth, selectedYear, isToday]);
+    
 
     const closeModal = () => {
         setHideForm(true);
@@ -45,31 +75,24 @@ const DailyView = (props) => {
             centered
         >
 
-            <Modal.Header closeButton>
+            <Modal.Header closeButton onHide={closeModal}>
                 <Modal.Title id="contained-modal-title-vcenter">
                     <h1 className="text-info">{title}</h1>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="bg-warning">
-                <h4>Tasks for today</h4>
+                <h4>{labels.todaysTasks}</h4>
                 <Container>
-                    <TaskList />
+                    <TaskList tasks={todaysTasks} setTasks={setTodaysTasks}/>
                 </Container>
                 {!hideForm &&
                     <Alert variant="info" onClose={() => setHideForm(true)} dismissible>
-                        <TaskForm />
+                        <TaskForm fetchTasksByDate={fetchTasksByDate} setTodaysTasks={setTodaysTasks}/>
                     </Alert>
                 }
             </Modal.Body>
-            <Modal.Footer>
-                <Row className="w-100">
-                    <Col className="text-left">
-                        <Button variant="info" onClick={() => setHideForm(false)}>Add a new task!</Button>
-                    </Col>
-                    <Col className="text-end">
-                        <Button onClick={closeModal}>Close</Button>
-                    </Col>
-                </Row>
+            <Modal.Footer className="w-100">
+                <Button variant="info" className="me-auto" onClick={() => setHideForm(false)}>{labels.newTodoButton}</Button>
             </Modal.Footer>
 
         </Modal>
