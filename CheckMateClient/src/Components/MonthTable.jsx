@@ -4,13 +4,10 @@ import Table from "react-bootstrap/esm/Table";
 import DayCard from "./DayCard";
 
 
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thirsday", "Friday", "Saturday"];
-
-
 const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) => {
-    const {weekStart} = useContext(SettingsContext);
+    const {weekStart, weekDays} = useContext(SettingsContext);
 
-    const headers = weekStart === "M" ? [...days.slice(1), days[0]] : days;
+    const headers = weekStart === "M" ? [...weekDays.slice(1), weekDays[0]] : weekDays;
 
     const totalCells = daysInTheMonth + startDay;
     const totalRows = Math.ceil(totalCells / 7);
@@ -22,7 +19,7 @@ const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) =>
                     <tr>
                         <th><i className="bi bi-calendar-check"></i></th>
                         {headers.map((day, index) => (
-                            <th key={index++} className="text-success shadow">{day}</th>
+                            <th key={index++} className="text-success shadow-lg">{day}</th>
                         ))}
                     </tr>
                 </thead>
@@ -30,7 +27,7 @@ const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) =>
                     {
                         Array.from({ length: totalRows }, (_, rowIndex) => (
                             <tr key={rowIndex}>
-                                <td className="text-success shadow">{current++}</td>
+                                <td className="text-success shadow-lg">{current++}</td>
                                 {
                                     Array.from({ length: 7 }, (_, colIndex) => {
                                         const dayIndex = rowIndex * 7 + colIndex;
