@@ -21,11 +21,9 @@ export const DateProvider = ({children}) => {
     const currentDate = new Date();
     
     const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-    const [selectedMonth, setSelectedMonth] = useState(getMonthName(currentDate.getMonth()));
+    const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
     const [selectedDay, setSelectedDay] = useState(currentDate.getDate());
     const [isToday, setIsToday] = useState(false);    
-
-    
 
 
     return(

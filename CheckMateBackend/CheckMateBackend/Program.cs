@@ -100,6 +100,7 @@ static async Task<IResult> UpdateTodo(TodoDb db, int id, Todo inputTodo)
     if (todo is null) return TypedResults.NotFound();
 
     todo.Name = inputTodo.Name;
+    todo.Date = inputTodo.Date;
     todo.IsCompleted = inputTodo.IsCompleted;
 
     await db.SaveChangesAsync();

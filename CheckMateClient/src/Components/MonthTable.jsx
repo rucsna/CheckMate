@@ -14,12 +14,12 @@ const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) =>
     let current = weekNumber;
 
     return (
-            <Table striped bordered hover variant="warning" >
+            <Table striped hover variant="warning">
                 <thead>
                     <tr>
-                        <th><i className="bi bi-calendar-check"></i></th>
+                        <th className="text-center align-middle"><i className="bi bi-calendar-check"></i></th>
                         {headers.map((day, index) => (
-                            <th key={index++} className="text-success shadow-lg">{day}</th>
+                            <th key={index++} className="text-center align-middle text-success shadow-lg">{day}</th>
                         ))}
                     </tr>
                 </thead>
@@ -27,15 +27,17 @@ const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) =>
                     {
                         Array.from({ length: totalRows }, (_, rowIndex) => (
                             <tr key={rowIndex}>
-                                <td className="text-success shadow-lg">{current++}</td>
+                                <td className="text-center align-middle text-success shadow-lg">{current++}</td>
                                 {
                                     Array.from({ length: 7 }, (_, colIndex) => {
                                         const dayIndex = rowIndex * 7 + colIndex;
                                         const currentDay = dayIndex - startDay + 1;
                                         if (dayIndex < startDay || currentDay > daysInTheMonth) return <td key={colIndex}></td>;
                                         return (
-                                            <td className="col-lg-2 col-md-2 col-sm-2 mb-6" key={colIndex}>
+                                            <td className="shadow-lg" key={colIndex}>
+                                                <div className="card-wrapper">
                                                 <DayCard className="day-card" currentDay={currentDay} setModalShow={setDailyViewShow} />
+                                                </div>
                                             </td>
                                         );
                                     })

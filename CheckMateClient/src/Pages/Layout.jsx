@@ -21,28 +21,34 @@ const Layout = ({ children, handleMonthChange }) => {
     children.setDailyViewShow(true);
   };
 
+  const handleNewTodoClick = () => {
+    setIsToday(true);
+    children.setAddTaskShow(true);
+  }
+
   const handleYearLeftClick = () => {
     const year = Number(selectedYear) - 1;
     setSelectedYear(year);
-    handleMonthChange(getMonthNumberFromName(selectedMonth) - 1, year);
+    handleMonthChange(selectedMonth, year);
   };
 
   const handleYearRightClick = () => {
     const year = Number(selectedYear) + 1;
     setSelectedYear(year);
-    handleMonthChange(getMonthNumberFromName(selectedMonth) - 1, year);
+    handleMonthChange(selectedMonth, year);
   };
 
   const setBackToday = () => {
     setSelectedYear(currentDate.getFullYear());
     handleMonthChange(currentDate.getMonth());
-    setSelectedMonth(getMonthName(currentDate.getMonth()));
+    setSelectedMonth(currentDate.getMonth());
     setSelectedDay(currentDate.getDate());
   };
 
   const handleDropdown = (eventKey) => {
     setDropdownSelectedMonth(parseInt(eventKey, 10));
-    handleMonthChange(eventKey, selectedYear);
+    //console.log('eventKey => ', eventKey);
+    handleMonthChange(Number(eventKey), selectedYear);
   };
 
 
@@ -76,7 +82,7 @@ const Layout = ({ children, handleMonthChange }) => {
 
         </Card>
         <div className="d-flex align-items-center justify-content-center">
-          <Button variant="outline-dark" className="ms-auto me-4 bg-warning text-primary shadow-lg" onClick={() => children.setAddTaskShow(true)}>{labels.newTodoButton}</Button>
+          <Button variant="outline-dark" className="ms-auto me-4 bg-warning text-primary shadow-lg" onClick={handleNewTodoClick}>{labels.newTodoButton}</Button>
           <Button variant="outline-dark" className="me-5 bg-secondary bg-opacity-75 text-warning shadow-lg" onClick={handleTodaysTaskClick}>{labels.todaysTasks}</Button>
         </div>
       </Nav>

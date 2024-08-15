@@ -15,10 +15,10 @@ const AddTaskModal = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    <h1 className="text-info">{labels.newTodoButton}</h1>
+                    <h1 className="text-success">{labels.newTodoButton}</h1>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="bg-info">
+            <Modal.Body className="bg-success bg-opacity-50">
                 <TaskForm />
             </Modal.Body>
         </Modal>
