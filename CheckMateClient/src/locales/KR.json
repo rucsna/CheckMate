@@ -1,0 +1,13 @@
+{
+    "newTodoButton": "새 태스크",
+    "todaysTasks": "오늘의 태스크",
+    "settings": "설정",
+    "weekStartM": "주는 월요일부터 시작하다",
+    "weekStartS": "주는 일요일부터 시작하다",
+    "chooseLanguage": "언어 선택",
+    "task": "태스크",
+    "date": "날짜",
+    "save": "저장하다",
+    "placeholder": "작업을 입력하세요...",
+    "notification": "이 작업을 삭제하시겠습니까?"
+}
