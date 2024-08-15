@@ -52,7 +52,8 @@ const MonthlyView = () => {
         setStartDayIfSunday(day2);
         weekStart === "M" ? setStartDay(startDayIfMonday) : setStartDay(startDayIfSunday);
        
-        setSelectedMonth(getMonthName(monthIndex));
+        setSelectedMonth(monthIndex);
+        //console.log('handleMonthChange => ', monthIndex);
         setWeekNumber(getWeekNumber(monthIndex, year));
         setDaysInTheMonth(lengthOfMonth);
     };
