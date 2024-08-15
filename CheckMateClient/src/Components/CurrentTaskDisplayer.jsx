@@ -3,9 +3,11 @@ import Alert from 'react-bootstrap/Alert';
 import { useState, useEffect, useContext } from 'react';
 import { DateContext } from '../Contexts/DateContext';
 import Button from 'react-bootstrap/Button';
+import { TaskContext } from '../Contexts/TaskContext';
 
 const CurrentTaskDisplayer = () => {
   const { currentDate } = useContext(DateContext);
+  const {fetchTasks} = useContext(TaskContext);
 
   const [incompleteTasks, setIncompleteTasks] = useState([]);
   const [showCarousel, setShowCarousel] = useState(true);
@@ -21,7 +23,7 @@ const CurrentTaskDisplayer = () => {
         }
         const taskData = await response.json();
         if (taskData) {
-          console.log(taskData);
+          //console.log(taskData);
           setIncompleteTasks(taskData.filter(task => !task.isCompleted));
         } else {
           // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
@@ -34,9 +36,9 @@ const CurrentTaskDisplayer = () => {
       };
     };
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
-  console.log(showCarousel);
+  //console.log(showCarousel);
   return (
     <>
     {showCarousel && 
