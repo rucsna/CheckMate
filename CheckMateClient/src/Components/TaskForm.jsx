@@ -8,14 +8,14 @@ import { SettingsContext } from "../Contexts/SettingsContext";
 import { TaskContext } from "../Contexts/TaskContext";
 
 
-const TaskForm = ({fetchTasksByDate, setTodaysTasks}) => {
-    const {currentDate, formatDate} = useContext(DateContext);
+const TaskForm = ({setTodaysTasks}) => {
+    const {currentDate, formatDate, isToday, selectedYear, selectedMonth, selectedDay} = useContext(DateContext);
     const {labels} = useContext(SettingsContext);
-    const {fetchTasks} = useContext(TaskContext);
+    const {fetchTasks, fetchTasksByDate} = useContext(TaskContext);
 
     const [task, setTask] = useState("");
-    const [date, setDate] = useState(formatDate(currentDate));
-    
+    const [date, setDate] = useState(isToday ? formatDate(currentDate) : `${selectedYear}-${selectedMonth < 10 ? "0" + (Number(selectedMonth)+1) : Number(selectedMonth)+1}-${selectedDay}`);
+
 
     const saveTask = async (event) => {
         event.preventDefault();
@@ -74,7 +74,7 @@ const TaskForm = ({fetchTasksByDate, setTodaysTasks}) => {
                     />
                 </Col>
             </Form.Group>
-            <Button variant="light" type="submit"><strong className="text-danger">{labels.save}</strong></Button>
+            <Button variant="outline-danger" type="submit" className="shadow-lg"><strong>{labels.save}</strong></Button>
         </Form>
     )
 };

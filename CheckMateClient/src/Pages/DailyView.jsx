@@ -7,64 +7,50 @@ import TaskList from "../Components/TaskList";
 import TaskForm from "../Components/TaskForm";
 import { DateContext } from "../Contexts/DateContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
-
-
-const fetchTasksByDate = async (date, setter) => {
-    try {
-        const response = await fetch(`http://localhost:5295/api/todos/${date}`);
-        if(!response.ok){
-            throw new Error("Problem with network response");
-        }
-        const taskData = await response.json();
-        setter(taskData);
-        // } else{
-        //     // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
-        //     // setShowToast(true);
-        //}
-    } catch (error) {
-        // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
-        // setShowToast(true);
-        // console.error(error);
-    };
-  };
+import { TaskContext } from "../Contexts/TaskContext";
 
 
 const DailyView = (props) => {
-    const { selectedDay, selectedMonth, selectedYear, currentDate, getMonthName, isToday, formatDate } = useContext(DateContext);
-    const {labels} = useContext(SettingsContext);
+    const { selectedDay, selectedMonth, selectedYear, currentDate, getMonthName, isToday} = useContext(DateContext);
+    const {fetchTasksByDate} = useContext(TaskContext);
+    const {labels, locale} = useContext(SettingsContext);
 
     const [hideForm, setHideForm] = useState(true);
     const [title, setTitle] = useState("");
     const [todaysTasks, setTodaysTasks] = useState([]);
+    const [todaysDate, setTodaysDate] = useState(currentDate.toISOString().slice(0, 10));
 
     
     useEffect(() => {
         if(isToday === true){
-            setTitle(() => setModalTitle(getMonthName(currentDate.getMonth()), currentDate.getDate()));    
+            setTitle(() => setModalTitle(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));    
         } else {
-            setTitle(() => setModalTitle(selectedMonth, selectedDay));
+            setTitle(() => setModalTitle(selectedYear, selectedMonth, selectedDay));
         }
         setHideForm(true);
     }, [selectedDay, selectedMonth, isToday]);
 
     useEffect(() => {
-        const date = isToday ? currentDate.toISOString().slice(0, 10) : `${selectedYear}-${selectedMonth}-${selectedDay}`;
+        setTodaysDate(isToday ? currentDate.toISOString().slice(0, 10) : `${selectedYear}-${selectedMonth < 10 ? "0" + (Number(selectedMonth)+1) : Number(selectedMonth)+1}-${selectedDay}`);
         
-        fetchTasksByDate(date, setTodaysTasks);
-    }, [selectedDay, selectedMonth, selectedYear, isToday]);
-    
+        fetchTasksByDate(todaysDate, setTodaysTasks);
+    }, [selectedDay, selectedMonth, selectedYear, isToday, todaysDate]);
+    //console.log('DATE', todaysDate);
 
     const closeModal = () => {
         setHideForm(true);
         props.onHide();
     };
 
-    const setModalTitle = (month, day) => {
-        let dayEnding = day == 1 || day == 21 || day == 31 ? 'st' :
-                        day == 2 || day == 22 ? 'nd' : 
-                        day == 3 || day == 23 ? 'rd' :
-                        'th';
-        return `${day}${dayEnding} ${month}`;
+    const setModalTitle = (year, month, day) => {
+        const date = new Date(Date.UTC(year, month, day));
+
+        let options = {
+            weekday: "long",
+            month: "long",
+            day: "numeric"
+        }
+        return new Intl.DateTimeFormat(`${locale}`, options).format(date);
     };
 
     return (
@@ -77,22 +63,22 @@ const DailyView = (props) => {
 
             <Modal.Header closeButton onHide={closeModal}>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    <h1 className="text-info">{title}</h1>
+                    <h1 className="text-success">{title}</h1>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="bg-warning">
                 <h4>{labels.todaysTasks}</h4>
                 <Container>
-                    <TaskList tasks={todaysTasks} setTasks={setTodaysTasks}/>
+                    <TaskList todaysDate={todaysDate} tasks={todaysTasks} setTasks={setTodaysTasks}/>
                 </Container>
                 {!hideForm &&
-                    <Alert variant="info" onClose={() => setHideForm(true)} dismissible>
-                        <TaskForm fetchTasksByDate={fetchTasksByDate} setTodaysTasks={setTodaysTasks}/>
+                    <Alert variant="success" onClose={() => setHideForm(true)} dismissible>
+                        <TaskForm setTodaysTasks={setTodaysTasks}/>
                     </Alert>
                 }
             </Modal.Body>
             <Modal.Footer className="w-100">
-                <Button variant="info" className="me-auto" onClick={() => setHideForm(false)}>{labels.newTodoButton}</Button>
+                <Button variant="success" className="me-auto" onClick={() => setHideForm(false)}>{labels.newTodoButton}</Button>
             </Modal.Footer>
 
         </Modal>
