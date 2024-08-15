@@ -4,7 +4,7 @@ import { DateContext } from "./DateContext";
 export const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
-    const { selectedYear, selectedMonth, getMonthNumberFromName } = useContext(DateContext);
+    const { selectedYear, selectedMonth } = useContext(DateContext);
 
     const [tasks, setTasks] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
@@ -12,7 +12,7 @@ export const TaskProvider = ({ children }) => {
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${getMonthNumberFromName(selectedMonth)}`);
+            const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${selectedMonth + 1}`);
             if (!response.ok) {
                 throw new Error("Problem with network response");
             }
@@ -31,6 +31,26 @@ export const TaskProvider = ({ children }) => {
         };
     };
 
+    const fetchTasksByDate = async (date, setter) => {
+        try {
+            const response = await fetch(`http://localhost:5295/api/todos/${date}`);
+            if (!response.ok) {
+                throw new Error("Problem with network response");
+            }
+            const taskData = await response.json();
+            console.log(taskData);
+            setter(taskData);
+            // } else{
+            //     // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
+            //     // setShowToast(true);
+            //}
+        } catch (error) {
+            // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
+            // setShowToast(true);
+            // console.error(error);
+        };
+    };
+
     useEffect(() => {
         fetchTasks();
         setShowToast(false);
@@ -38,7 +58,7 @@ export const TaskProvider = ({ children }) => {
 
 
     return (
-        <TaskContext.Provider value={{ tasks, fetchTasks }}>
+        <TaskContext.Provider value={{ tasks, fetchTasks, fetchTasksByDate }}>
             {children}
         </TaskContext.Provider>
     );
