@@ -24,4 +24,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="CheckMateBackendUnitTests" />
+  </ItemGroup>
+
 </Project>
