@@ -1,6 +1,4 @@
 using CheckMateBackend;
-using CheckMateBackend.Models;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
