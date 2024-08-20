@@ -35,6 +35,10 @@ public static class TodoEndpoints
     
     public static async Task<IResult> GetTodosByMonth(TodoDb db, int year, int month)
     {
+        if (year <= DateTime.Now.Year - 100 || year >= DateTime.Now.Year + 100 || month < 1 || month > 12)
+        {
+            return TypedResults.BadRequest("Invalid year or month");
+        }
         var todos = await db.TodoItems.Where(todo => todo.Date.Year == year && todo.Date.Month == month)
             .ToListAsync();
         return TypedResults.Ok(todos);
