@@ -51,4 +51,61 @@ public class TodoEndpointsTests
         });
     }
     
+    [Fact]
+    public async Task GetTodosByDate_ReturnsTodoWithTheGivenDate()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+        db.TodoItems.Add(new Todo
+            { Id = 3, Name = "Test todo3", IsCompleted = false, Date = new DateTime(2000, 11, 11) });
+        await db.SaveChangesAsync();
+        
+        // Act
+        var result = await TodoEndpoints.GetTodosByDate(db, "2000-11-11");
+        
+        // Assert
+        var okResult = Assert.IsType<Ok<List<Todo>>>(result);
+        
+        Assert.NotNull(okResult.Value);
+        Assert.NotEmpty(okResult.Value);
+        Assert.Single(okResult.Value);
+        Assert.Collection(okResult.Value, todo =>
+        {
+            Assert.Equal(new DateTime(2000, 11, 11), todo.Date);
+        });
+    }
+    
+    [Fact]
+    public async Task GetTodosByDate_ReturnsEmptyList_WhenDateNotFound()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        // Act
+        var result = await TodoEndpoints.GetTodosByDate(db, "2000-11-11");
+        
+        // Assert
+        var okResult = Assert.IsType<Ok<List<Todo>>>(result);
+        
+        Assert.NotNull(okResult.Value);
+        Assert.Empty(okResult.Value);
+    }
+    
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("20001-112-11")]
+    [InlineData("date")]
+    public async Task GetTodosByDate_ReturnsBadRequest_WhenInvalidDate(string date)
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        // Act
+        var result = await TodoEndpoints.GetTodosByDate(db, date);
+        
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequest<string>>(result);
+        Assert.Equal("Invalid date format", badRequestResult.Value);
+    }
 }
