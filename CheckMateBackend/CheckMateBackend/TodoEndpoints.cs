@@ -46,10 +46,12 @@ public static class TodoEndpoints
     
     public static async Task<IResult> GetTodo(TodoDb db, int id)
     {
-        return await db.TodoItems.FindAsync(id)
-            is Todo todo
-            ? TypedResults.Ok(todo)
-            : TypedResults.NotFound();
+        var todo = await db.TodoItems.FindAsync(id);
+        if (todo != null)
+        {
+            return TypedResults.Ok(todo);
+        }
+        return TypedResults.NotFound();
     }
     
     public static async Task<IResult> CreateTodo(Todo todo, TodoDb db)
