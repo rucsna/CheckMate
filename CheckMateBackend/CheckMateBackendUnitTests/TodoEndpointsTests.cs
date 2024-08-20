@@ -172,4 +172,34 @@ public class TodoEndpointsTests
         var badRequestResult = Assert.IsType<BadRequest<string>>(result);
         Assert.Equal("Invalid year or month", badRequestResult.Value);
     }
+
+    [Fact]
+    public async Task GetTodo_ReturnCorrectTodoFromDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+        
+        // Act
+        var result = await TodoEndpoints.GetTodo(db, 1);
+        
+        // Assert
+        var okResult = Assert.IsType<Ok<Todo>>(result);
+        
+        Assert.NotNull(okResult.Value);
+        Assert.Equal(1, okResult.Value.Id);
+    }
+
+    [Fact]
+    public async Task GetTodo_ReturnNotFound_IfNotExist()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+        
+        // Act
+        var result = await TodoEndpoints.GetTodo(db, 5);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFound>(result);
+        Assert.NotNull(notFoundResult);
+    }
 }
