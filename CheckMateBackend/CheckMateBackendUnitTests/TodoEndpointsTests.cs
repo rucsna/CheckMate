@@ -252,7 +252,7 @@ public class TodoEndpointsTests
     }
 
     [Fact]
-    public async Task UpdateTodo_ReturnNotFound_WhenTodoToUpdateNotInTheDatabase()
+    public async Task UpdateTodo_ReturnNotFound_WhenTodoToUpdateNotInDatabase()
     {
         // Arrange
         await using var db = CreateDbContextWithTestData();
@@ -261,6 +261,36 @@ public class TodoEndpointsTests
 
         // Act
         var result = await TodoEndpoints.UpdateTodo(db, 4, updatedTodo);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFound>(result);
+        Assert.NotNull(notFoundResult);
+    }
+
+    [Fact]
+    public async Task DeleteTodo_DeleteTodoFromDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+        
+        // Act
+        var result = await TodoEndpoints.DeleteTodo(db, 1);
+        
+        // Assert
+        var noContentResult = Assert.IsType<NoContent>(result);
+        Assert.NotNull(noContentResult);
+        Assert.Equal(1, db.TodoItems.Count());
+        Assert.Collection(db.TodoItems, todo => Assert.Equal(2, todo.Id));
+    }
+    
+    [Fact]
+    public async Task DeleteTodo_ReturnNotFound_WhenTodoWithGivenId_NotInDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        // Act
+        var result = await TodoEndpoints.DeleteTodo(db, 4);
         
         // Assert
         var notFoundResult = Assert.IsType<NotFound>(result);
