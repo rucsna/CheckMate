@@ -202,4 +202,40 @@ public class TodoEndpointsTests
         var notFoundResult = Assert.IsType<NotFound>(result);
         Assert.NotNull(notFoundResult);
     }
+
+    [Fact]
+    public async Task CreateTodo_CreateNewTodoInDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        var newTodo = new Todo { Name = "New test todo", IsCompleted = false, Date = new DateTime(2000, 1, 1) };
+
+        // Act
+        var result = await TodoEndpoints.CreateTodo(newTodo, db);
+        
+        // Assert
+        var createdResult = Assert.IsType<Created<Todo>>(result);
+        
+        Assert.NotNull(createdResult);
+        Assert.NotNull(createdResult.Location);
+        
+        Assert.Equal(3, db.TodoItems.Count());
+        Assert.Collection(db.TodoItems, todo1 =>
+        {
+            Assert.Equal("Test todo1", todo1.Name);
+            Assert.Equal(TestDate, todo1.Date);
+            Assert.False(todo1.IsCompleted);
+        }, todo2 =>
+        {
+            Assert.Equal("Test todo2", todo2.Name);
+            Assert.Equal(TestDate, todo2.Date);
+            Assert.True(todo2.IsCompleted);
+        }, todo3 =>
+        {
+            Assert.Equal("New test todo", todo3.Name);
+            Assert.Equal(new DateTime(2000,1,1), todo3.Date);
+            Assert.False(todo3.IsCompleted);
+        });
+    }
 }
