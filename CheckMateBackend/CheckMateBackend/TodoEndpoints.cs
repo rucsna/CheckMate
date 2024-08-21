@@ -63,15 +63,17 @@ public static class TodoEndpoints
     
     public static async Task<IResult> UpdateTodo(TodoDb db, int id, Todo inputTodo)
     {
-        var todo = await db.TodoItems.FindAsync(id);
-        if (todo is null) return TypedResults.NotFound();
-    
-        todo.Name = inputTodo.Name;
-        todo.Date = inputTodo.Date;
-        todo.IsCompleted = inputTodo.IsCompleted;
-    
-        await db.SaveChangesAsync();
-        return TypedResults.NoContent();
+        var existingTodo = await db.TodoItems.FindAsync(id);
+        if (existingTodo != null)
+        {
+            existingTodo.Name = inputTodo.Name;
+            existingTodo.Date = inputTodo.Date;
+            existingTodo.IsCompleted = inputTodo.IsCompleted;
+            
+            await db.SaveChangesAsync();
+            return TypedResults.Created($"/api/todos/{existingTodo.Id}", existingTodo);
+        }
+        return TypedResults.NotFound();
     }
     
     public static async Task<IResult> DeleteTodo(TodoDb db, int id)
