@@ -17,7 +17,7 @@ The app has a calendar like view with a choosen month where finished and unfinis
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![React Bootstrap](https://img.shields.io/badge/React%20Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
-![Bootswatch:Sketchy](https://img.shields.io/badge/React%20Native-20232A?style=for-the-badge)
+![Bootswatch:Sketchy](https://img.shields.io/badge/Bootswatch:Sketchy-20232A?style=for-the-badge)
 ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 ## Features
