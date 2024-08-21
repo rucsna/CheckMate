@@ -78,9 +78,10 @@ public static class TodoEndpoints
     
     public static async Task<IResult> DeleteTodo(TodoDb db, int id)
     {
-        if (await db.TodoItems.FindAsync(id) is Todo todo)
+        var todoToDelete = await db.TodoItems.FindAsync(id);
+        if (todoToDelete != null)
         {
-            db.TodoItems.Remove(todo);
+            db.TodoItems.Remove(todoToDelete);
             await db.SaveChangesAsync();
             return Results.NoContent();
         }
