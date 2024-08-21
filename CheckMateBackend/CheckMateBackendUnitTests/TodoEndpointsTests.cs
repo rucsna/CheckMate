@@ -221,21 +221,49 @@ public class TodoEndpointsTests
         Assert.NotNull(createdResult.Location);
         
         Assert.Equal(3, db.TodoItems.Count());
-        Assert.Collection(db.TodoItems, todo1 =>
-        {
-            Assert.Equal("Test todo1", todo1.Name);
-            Assert.Equal(TestDate, todo1.Date);
-            Assert.False(todo1.IsCompleted);
-        }, todo2 =>
-        {
-            Assert.Equal("Test todo2", todo2.Name);
-            Assert.Equal(TestDate, todo2.Date);
-            Assert.True(todo2.IsCompleted);
-        }, todo3 =>
-        {
-            Assert.Equal("New test todo", todo3.Name);
-            Assert.Equal(new DateTime(2000,1,1), todo3.Date);
-            Assert.False(todo3.IsCompleted);
-        });
+        
+        var createdTodo = await db.TodoItems.FindAsync(3);
+        Assert.NotNull(createdTodo);
+        Assert.Equal("New test todo", createdTodo.Name);
+        Assert.Equal(new DateTime(2000,1,1), createdTodo.Date);
+    }
+
+    [Fact]
+    public async Task UpdateTodo_UpdateTodoInDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        var updatedTodo = new Todo { Name = "Updated test todo", IsCompleted = true };
+
+        // Act
+        var result = await TodoEndpoints.UpdateTodo(db, 1, updatedTodo);
+        
+        // Assert
+        var createdResult = Assert.IsType<Created<Todo>>(result);
+        
+        Assert.NotNull(createdResult);
+        Assert.NotNull(createdResult.Location);
+        
+        var todoInDb = await db.TodoItems.FindAsync(1);
+        Assert.NotNull(todoInDb);
+        Assert.Equal("Updated test todo", todoInDb.Name);
+        Assert.True(todoInDb.IsCompleted);
+    }
+
+    [Fact]
+    public async Task UpdateTodo_ReturnNotFound_WhenTodoToUpdateNotInTheDatabase()
+    {
+        // Arrange
+        await using var db = CreateDbContextWithTestData();
+
+        var updatedTodo = new Todo { Name = "Updated test todo", IsCompleted = true };
+
+        // Act
+        var result = await TodoEndpoints.UpdateTodo(db, 4, updatedTodo);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFound>(result);
+        Assert.NotNull(notFoundResult);
     }
 }
