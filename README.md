@@ -8,8 +8,8 @@
 - [Installation](#installation)
 
 ## About The Project
-Check Mate is a todo application for handling one's tasks.
-The app has a calendar like view with a choosen month where finished and unfinished todos can be checked.
+Check Mate is a todo application designed to help you manage your tasks efficiently.
+The app provides a calendar-like view of a selected month, allowing you to easily add new todos or check both finished and unfinished ones.
 
 ## Technologies
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
@@ -17,12 +17,11 @@ The app has a calendar like view with a choosen month where finished and unfinis
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![React Bootstrap](https://img.shields.io/badge/React%20Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
-![Bootswatch:Sketchy](https://img.shields.io/badge/Bootswatch:SketchyCC2927?style=for-the-badge)
 ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 ## Features
-Monthly View - shows the current month with the number of finished and unfinished todos, highlighting the current day. The page has a year and month selector, settings with different options, and quick access to adding new tasks and checking the daily todos.
+-`Monthly View`: Displays the current month with indicators for the number of completed and pending todos, while highlighting the current day. The page includes a year and a month selector, settings with customizable options, and quick access for adding new tasks and viewing daily todos.
 
-<img src="application_images/monthly_view.jpg alt="MonthlyView">
+<img src="application_images/monthly_view.jpg" alt="MonthlyView">
 
 ## Installation
