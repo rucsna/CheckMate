@@ -28,14 +28,14 @@ const Footer = () => {
         <footer className="bg-success bg-opacity-75">
             <i className="bi bi-gear ms-5" onClick={() => setShow(true)}> {labels.settings}</i>
 
-            <Offcanvas show={show} onHide={() => setShow(false)}>
+            <Offcanvas show={show} onHide={() => setShow(false)} className="bg-secondary bg-opacity-75 text-warning">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>{labels.settings}</Offcanvas.Title>
                 </Offcanvas.Header>
 
                 <Offcanvas.Body>
-                    <ListGroup>
-                        <ListGroup.Item>
+                    <ListGroup >
+                        <ListGroup.Item className="bg-warning bg-opacity-50">
                             <FormCheck 
                             type="switch" 
                             id="week-start-switch" 
@@ -44,7 +44,7 @@ const Footer = () => {
                             onChange={handleWeekStartChange}></FormCheck>
                         </ListGroup.Item>
 
-                        <ListGroup.Item>{labels.chooseLanguage}
+                        <ListGroup.Item className="bg-warning bg-opacity-50">{labels.chooseLanguage}
                             {Object.entries(languageOptions).map(([code, label]) => (
                                 <FormCheck
                                 key={code}
