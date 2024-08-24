@@ -22,6 +22,15 @@ The app provides a calendar-like view of a selected month, allowing you to easil
 ## Features
 -`Monthly View`: Displays the current month with indicators for the number of completed and pending todos, while highlighting the current day. The page includes a year and a month selector, settings with customizable options, and quick access for adding new tasks and viewing daily todos.
 
-<img src="application_images/monthly_view.jpg" alt="MonthlyView">
+<img src="./CheckMateClient/src/assets/application_images/monthly_view.jpg" alt="MonthlyView">
+
+-`Daily View`: Displays the selected day along with its associated todos. Tasks can be marked as finished or unfinished, updated or deleted. New todos can also be added.
+
+<table>
+  <tr>
+    <td><img src="./CheckMateClient/src/assets/application_images/day_view.jpg" alt="DailyView"></td>
+    <td><img src="./CheckMateClient/src/assets/application_images/add_todo.jpg" alt="AddTodo"></td>
+  </tr>
+</table>
 
 ## Installation
