@@ -33,4 +33,15 @@ The app provides a calendar-like view of a selected month, allowing you to easil
   </tr>
 </table>
 
-## Installation
+-`Settings`: In the settings, you can save your preferences, such as the starting day of the week or language.
+
+<table>
+  <tr>
+    <td><img src="./CheckMateClient/src/assets/application_images/settings.jpg" alt="Settings"></td>
+  </tr>
+  <tr>
+    <td><img src="./CheckMateClient/src/assets/application_images/language_change_hun.jpg" alt="LanguageHun"></td>
+    <td><img src="./CheckMateClient/src/assets/application_images/language_change_ger.jpg" alt="LanguageGer"></td>
+    <td><img src="./CheckMateClient/src/assets/application_images/language_change_kor.jpg" alt="LanguageKor"></td>
+  </tr>
+</table>
