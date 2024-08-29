@@ -49,13 +49,8 @@
     padding: 0.5rem 1rem;
 }
 
-.month-dropdown .dropdown-toggle::after {
-    display: none;
-}
-
-.month-dropdown .dropdown-toggle::before {
-    display: inline-flex;
-    align-items: center;
+.position-absolute {
+    z-index: 100;
 }
 
 .task-update-form-control {
