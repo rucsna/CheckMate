@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SettingsContext } from "../Contexts/SettingsContext";
+import { SettingsContext } from "../../Contexts/SettingsContext";
 import Table from "react-bootstrap/esm/Table";
 import DayCard from "./DayCard";
 
