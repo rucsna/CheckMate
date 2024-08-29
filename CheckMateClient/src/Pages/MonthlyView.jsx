@@ -1,13 +1,13 @@
-import Layout from "./Layout";
 import { useState, useEffect, useContext } from "react";
+import { DateContext } from "../Contexts/DateContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
+import Layout from "./Layout";
 import DailyView from "./DailyView";
 import AddTaskModal from "../Components/AddTaskModal";
-import { DateContext } from "../Contexts/DateContext";
-import MonthTable from "../Components/MonthTable";
-import { SettingsContext } from "../Contexts/SettingsContext";
+import MonthTable from "../Components/MonthlyView/MonthTable";
 
 
-// Initializing functions for dates
+// Initializing functions for setting the selected month data
 const monthLengthCounter = (month, year) => new Date(year, month, 0).getDate();
 
 const getStartDay = (month, year, day) => new Date(year, month, day).getDay();
@@ -21,7 +21,7 @@ const getWeekNumber = (month, year) => {
 
 
 const MonthlyView = () => {
-    const { currentDate, setSelectedMonth, selectedMonth, selectedYear, getMonthName } = useContext(DateContext);
+    const { currentDate, setSelectedMonth, selectedMonth, selectedYear } = useContext(DateContext);
     const { weekStart } = useContext(SettingsContext);
 
     const [daysInTheMonth, setDaysInTheMonth] = useState(monthLengthCounter(currentDate.getMonth() + 1, currentDate.getFullYear()));
@@ -53,7 +53,6 @@ const MonthlyView = () => {
         weekStart === "M" ? setStartDay(startDayIfMonday) : setStartDay(startDayIfSunday);
        
         setSelectedMonth(monthIndex);
-        //console.log('handleMonthChange => ', monthIndex);
         setWeekNumber(getWeekNumber(monthIndex, year));
         setDaysInTheMonth(lengthOfMonth);
     };
@@ -85,6 +84,6 @@ const MonthlyView = () => {
             </Layout>
         </div>
     )
-}
+};
 
 export default MonthlyView;
