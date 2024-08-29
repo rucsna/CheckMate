@@ -28,7 +28,7 @@ export const TaskProvider = ({ children }) => {
             setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
             setShowToast(true);
             console.error(error);
-        };
+        }
     };
 
     const fetchTasksByDate = async (date, setter) => {
@@ -48,7 +48,7 @@ export const TaskProvider = ({ children }) => {
             // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
             // setShowToast(true);
             // console.error(error);
-        };
+        }
     };
 
     useEffect(() => {
