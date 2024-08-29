@@ -40,7 +40,7 @@ const Footer = () => {
                             type="switch" 
                             id="week-start-switch" 
                             label={weekStart === "M" ? `${labels.weekStartM}` : `${labels.weekStartS}`}
-                            checked={weekStart === "M" ? false : true} 
+                            checked={weekStart !== "M"}
                             onChange={handleWeekStartChange}></FormCheck>
                         </ListGroup.Item>
 
