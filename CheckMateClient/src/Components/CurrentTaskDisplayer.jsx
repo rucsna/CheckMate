@@ -13,7 +13,7 @@ const CurrentTaskDisplayer = () => {
 
 
   useEffect(() => {
-    const date = currentDate.toISOString().slice(0, 10);
+    const date = formatDate(currentDate);
     const filteredTasks = tasks.filter(task => {
       const taskDate = formatDate(new Date(task.date));
       return taskDate === date;
