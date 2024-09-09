@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { DateContext } from "./DateContext";
 
+
 export const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
@@ -9,6 +10,7 @@ export const TaskProvider = ({ children }) => {
     const [tasks, setTasks] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [showToast, setShowToast] = useState(false);
+    const [dailyViewShow, setDailyViewShow] = useState(false);
 
     const fetchTasks = async () => {
         try {
@@ -21,14 +23,14 @@ export const TaskProvider = ({ children }) => {
                 console.log(taskData);
                 setTasks(taskData);
             } else {
-                setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
-                setShowToast(true);
+                //setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
+                //setShowToast(true);
             }
         } catch (error) {
-            setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
-            setShowToast(true);
+            // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
+            // setShowToast(true);
             console.error(error);
-        };
+        }
     };
 
     const fetchTasksByDate = async (date, setter) => {
@@ -48,17 +50,17 @@ export const TaskProvider = ({ children }) => {
             // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
             // setShowToast(true);
             // console.error(error);
-        };
+        }
     };
 
     useEffect(() => {
-        fetchTasks();
+        fetchTasks(setTasks, selectedYear, selectedMonth);
         setShowToast(false);
     }, [selectedMonth, selectedYear]);
 
 
     return (
-        <TaskContext.Provider value={{ tasks, fetchTasks, fetchTasksByDate }}>
+        <TaskContext.Provider value={{ tasks, fetchTasks, fetchTasksByDate, dailyViewShow, setDailyViewShow }}>
             {children}
         </TaskContext.Provider>
     );

@@ -3,55 +3,55 @@ import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
 import Alert from "react-bootstrap/Alert";
 import { useState, useEffect, useContext } from "react";
-import TaskList from "../Components/TaskList";
-import TaskForm from "../Components/TaskForm";
+import PropTypes from "prop-types";
 import { DateContext } from "../Contexts/DateContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { TaskContext } from "../Contexts/TaskContext";
+import TaskList from "../Components/TaskList";
+import TaskForm from "../Components/TaskForm";
+
+
+const setModalTitle = (year, month, day, locale) => {
+    const date = new Date(Date.UTC(year, month, day));
+
+    let options = {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+    }
+    return new Intl.DateTimeFormat(`${locale}`, options).format(date);
+};
 
 
 const DailyView = (props) => {
-    const { selectedDay, selectedMonth, selectedYear, currentDate, getMonthName, isToday} = useContext(DateContext);
-    const {fetchTasksByDate} = useContext(TaskContext);
-    const {labels, locale} = useContext(SettingsContext);
+    const { selectedDay, selectedMonth, selectedYear, currentDate, isToday, formatDate } = useContext(DateContext);
+    const { fetchTasksByDate } = useContext(TaskContext);
+    const { labels, locale } = useContext(SettingsContext);
 
-    const [hideForm, setHideForm] = useState(true);
+    const [hideTaskForm, setHideTaskForm] = useState(true);
     const [title, setTitle] = useState("");
     const [todaysTasks, setTodaysTasks] = useState([]);
-    const [todaysDate, setTodaysDate] = useState(currentDate.toISOString().slice(0, 10));
+    const [todaysDate, setTodaysDate] = useState(formatDate(currentDate));
 
-    
+
     useEffect(() => {
-        if(isToday === true){
-            setTitle(() => setModalTitle(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()));    
+        if (isToday === true) {
+            setTitle(() => setModalTitle(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), locale));
         } else {
-            setTitle(() => setModalTitle(selectedYear, selectedMonth, selectedDay));
+            setTitle(() => setModalTitle(selectedYear, selectedMonth, selectedDay, locale));
         }
-        setHideForm(true);
-    }, [selectedDay, selectedMonth, isToday]);
+        setHideTaskForm(true);
+        setTodaysDate(isToday ? formatDate(currentDate) : formatDate(new Date(selectedYear, selectedMonth, selectedDay)));
 
-    useEffect(() => {
-        setTodaysDate(isToday ? currentDate.toISOString().slice(0, 10) : `${selectedYear}-${selectedMonth < 10 ? "0" + (Number(selectedMonth)+1) : Number(selectedMonth)+1}-${selectedDay}`);
-        
         fetchTasksByDate(todaysDate, setTodaysTasks);
-    }, [selectedDay, selectedMonth, selectedYear, isToday, todaysDate]);
-    //console.log('DATE', todaysDate);
+    }, [selectedDay, selectedMonth, selectedYear, isToday, todaysDate, formatDate, currentDate, fetchTasksByDate, locale]);
+
 
     const closeModal = () => {
-        setHideForm(true);
+        setHideTaskForm(true);
         props.onHide();
     };
 
-    const setModalTitle = (year, month, day) => {
-        const date = new Date(Date.UTC(year, month, day));
-
-        let options = {
-            weekday: "long",
-            month: "long",
-            day: "numeric"
-        }
-        return new Intl.DateTimeFormat(`${locale}`, options).format(date);
-    };
 
     return (
         <Modal
@@ -69,20 +69,24 @@ const DailyView = (props) => {
             <Modal.Body className="bg-warning">
                 <h4>{labels.todaysTasks}</h4>
                 <Container>
-                    <TaskList todaysDate={todaysDate} tasks={todaysTasks} setTasks={setTodaysTasks}/>
+                    <TaskList todaysDate={todaysDate} tasks={todaysTasks} setTasks={setTodaysTasks} />
                 </Container>
-                {!hideForm &&
-                    <Alert variant="success" onClose={() => setHideForm(true)} dismissible>
-                        <TaskForm setTodaysTasks={setTodaysTasks}/>
+                {!hideTaskForm &&
+                    <Alert variant="success" onClose={() => setHideTaskForm(true)} dismissible>
+                        <TaskForm setTodaysTasks={setTodaysTasks} />
                     </Alert>
                 }
             </Modal.Body>
             <Modal.Footer className="w-100">
-                <Button variant="success" className="me-auto" onClick={() => setHideForm(false)}>{labels.newTodoButton}</Button>
+                <Button variant="success" className="me-auto" onClick={() => setHideTaskForm(false)}>{labels.newTodoButton}</Button>
             </Modal.Footer>
 
         </Modal>
     )
-}
+};
+
+DailyView.propTypes = {
+    props: PropTypes.any
+};
 
 export default DailyView;

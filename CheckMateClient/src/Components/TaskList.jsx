@@ -13,7 +13,7 @@ const TaskList = ({ tasks, setTasks, todaysDate }) => {
 
     const [taskId, setTaskId] = useState(0);
     const [name, setName] = useState("");
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(null);
 
 
     const handleTask = async (event, id, isCompleted, name, date) => {
@@ -24,7 +24,7 @@ const TaskList = ({ tasks, setTasks, todaysDate }) => {
             updatedTask.isCompleted = isCompleted;
             updatedTask.name = name;
             updatedTask.date = date;
-        };
+        }
         //console.log(updatedTask);
 
         try {
@@ -71,8 +71,6 @@ const TaskList = ({ tasks, setTasks, todaysDate }) => {
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.ok) {
-                console.log("task successfully deleted");
-
                 fetchTasksByDate(todaysDate, setTasks);
             } else {
                 console.error("error deleting task", response.status, response.statusText);

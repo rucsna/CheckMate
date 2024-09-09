@@ -1,10 +1,12 @@
-import Modal from "react-bootstrap/Modal";
-import TaskForm from "./TaskForm";
 import { useContext } from "react";
 import { SettingsContext } from "../Contexts/SettingsContext";
+import { Modal } from "react-bootstrap";
+import TaskForm from "./TaskForm";
+import PropTypes from "prop-types";
+
 
 const AddTaskModal = (props) => {
-    const {labels} = useContext(SettingsContext);
+    const { labels } = useContext(SettingsContext);
 
     return (
         <Modal
@@ -23,6 +25,10 @@ const AddTaskModal = (props) => {
             </Modal.Body>
         </Modal>
     )
-}
+};
+
+AddTaskModal.propTypes = {
+    props: PropTypes.any
+};
 
 export default AddTaskModal;

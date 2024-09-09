@@ -11,7 +11,7 @@ const getWeekDaysArray = (locale) => {
     var baseDate = new Date(Date.UTC(2017, 0, 1));
     var weekDays = [];
     for (var i = 0; i < 7; i++) {
-        weekDays.push(baseDate.toLocaleDateString(locale, { weekday: 'long' }));
+        weekDays.push(baseDate.toLocaleDateString(locale, { weekday: 'long' }).toUpperCase());
         baseDate.setDate(baseDate.getDate() + 1);
     }
     return weekDays;

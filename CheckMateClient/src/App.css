@@ -1,41 +1,206 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #7aba78;
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout-container main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.layout-container footer {
+    flex-shrink: 0;
+    height: 100px;
+    background-color: #0a6847;
+}
+
+.navigation-bar {
+    background-color: #0a6847;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.left-section .right-section {
+    display: flex;
+    align-items: center;
+}
+
+.navigation-card {
+    background-color: #f3ca52;
+    color: #3a405a;
+    font-weight: bold;
+    border: 1px solid #f3ca52;
+    box-shadow: 10px 10px 24px;
+}
+
+.navigation-card .dropdown-title {
+    color: #3a405a;
+    font-weight: bold;
+}
+
+.navigation-card .month-dropdown-item {
+    background-color: #7aba78;
+}
+
+.nav-button {
+    background-color: #3a405a;
+    color: #f3ca52;
+    font-weight: bold;
+    border: #3a405a;
+    box-shadow: 10px 10px 24px #3a405a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-button:hover {
+    transform: scale(1.06);
+    background-color: #f3ca52;
+    color: #3a405a;
+    box-shadow: 10px 12px 24px #7aba78; 
+}
+
 .table-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-}
-
-.table-wrapper {
     flex-grow: 1;
-    overflow-y: auto;
     margin-bottom: 1rem;
+    overflow-y: auto;
 }
 
-.table-container .footer {
-    flex-shrink: 0;
+
+.calendar-grid-container {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(100px, 1fr));
+    gap: 4px;
+    padding: 20px;
+    flex-grow: 1;
 }
 
-.table td {
-    height: 110px;
-    padding: 3px;
+.header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    vertical-align: middle;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    font-weight: bold;
+    padding: 8px;
+    /*border: 1px solid #f6e9b2;*/
+    border-radius: 12px;
+    box-shadow: 5px 10px 24px;
 }
 
-.card-wrapper {
-    height: 100%;
+.weekend-header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f2e091;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    font-weight: bold;
+    padding: 8px;
+    border: 1px solid #3a405a;
+    border-radius: 12px;
+    box-shadow: 5px 10px 24px;
+}
+
+.week-header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 50px;
+    width: 100%;
+}
+
+.calendar-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.week-card {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 110px;
+    max-width: 50px;
+    width: 100%;
+    background-color: #f6e9b2;
+    color: #3a405a;
+    padding: 8px;
+    border: 1px solid #3a405a;
+    border-radius: 12px;
 }
 
 .day-card {
-    height: 110px;
-    width: 100px;
+    height: 100%;
+    width: 100%;
+    max-width: 180px;
+    max-height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     box-sizing: border-box;
+    background-color: #f6e9b2;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    border: 2px solid #3a405a;
+    box-shadow: 10px 10px 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.day-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 12px 24px;
+}
+
+.day-card.disabled-card {
+    background-color: #f3f3e7;
+    color: #a9a9c7 !important;
+    text-shadow: none;
+    opacity: 0.6;
+    border-color: #f3f3e7;
+    transition: none !important;
+}
+
+.background-today {
+    background-color: #f3ca52;
+}
+
+.text-today {
+    color: #3a405a;
+    font-weight: bold;
+}
+
+.background-weekend {
+    background-color: #f2e091;
+}
+
+.day-card .finished-badge {
+    background-color: #7aba78 !important;
+    color: #3a405a !important;
+}
+
+.day-card .unfinished-badge {
+    background-color: #880d1e !important;
+    color: #f6e9b2 !important;
 }
 
 .carousel-item-content {
@@ -43,19 +208,25 @@
     align-items: center;
     justify-content: center;
     font-size: 1rem;
-    color: black;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    background-color: #f6e9b2;
     width: 70%;
     margin: auto;
     padding: 0.5rem 1rem;
+    box-shadow: 10px 10px 24px;
 }
 
-.month-dropdown .dropdown-toggle::after {
-    display: none;
+.position-absolute {
+    z-index: 100;
+    color: #3a405a;
+    text-shadow: #f6e9b2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.month-dropdown .dropdown-toggle::before {
-    display: inline-flex;
-    align-items: center;
+.position-absolute:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px;
 }
 
 .task-update-form-control {
