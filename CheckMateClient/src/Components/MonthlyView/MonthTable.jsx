@@ -1,54 +1,89 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SettingsContext } from "../../Contexts/SettingsContext";
-import Table from "react-bootstrap/esm/Table";
 import DayCard from "./DayCard";
+import { DateContext } from "../../Contexts/DateContext";
+import { TaskContext } from "../../Contexts/TaskContext";
 
 
-const MonthTable = ({daysInTheMonth, startDay, weekNumber, setDailyViewShow}) => {
-    const {weekStart, weekDays} = useContext(SettingsContext);
+const MonthTable = () => {
+    const { daysInTheMonth, startDay, setStartDay, weekNumber, selectedYear, selectedMonth, monthLengthCounter } = useContext(DateContext);
+    const { weekStart, weekDays } = useContext(SettingsContext);
+    const { setDailyViewShow } = useContext(TaskContext);
+
+    useEffect(() => {
+        if (startDay < 0) setStartDay(6);
+    }, [setStartDay, startDay]);
 
     const headers = weekStart === "M" ? [...weekDays.slice(1), weekDays[0]] : weekDays;
 
+    // calculate the cells for the month and set the number of the week for the first column of each row
     const totalCells = daysInTheMonth + startDay;
+    const totalColumns = 8;
     const totalRows = Math.ceil(totalCells / 7);
     let current = weekNumber;
 
+    // calculate the number of empty cells at the beginning and end of the calendar
+    const previousMonthDays = monthLengthCounter(selectedYear, selectedMonth - 1);
+    const emptyStartCells = startDay;
+
+
     return (
-            <Table striped hover variant="warning">
-                <thead>
-                    <tr>
-                        <th className="text-center align-middle"><i className="bi bi-calendar-check"></i></th>
-                        {headers.map((day, index) => (
-                            <th key={index++} className="text-center align-middle text-success shadow-lg">{day}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        Array.from({ length: totalRows }, (_, rowIndex) => (
-                            <tr key={rowIndex}>
-                                <td className="text-center align-middle text-success shadow-lg">{current++}</td>
-                                {
-                                    Array.from({ length: 7 }, (_, colIndex) => {
-                                        const dayIndex = rowIndex * 7 + colIndex;
-                                        const currentDay = dayIndex - startDay + 1;
-                                        if (dayIndex < startDay || currentDay > daysInTheMonth) return <td key={colIndex}></td>;
-                                        return (
-                                            <td className="shadow-lg" key={colIndex}>
-                                                <div className="card-wrapper">
-                                                <DayCard className="day-card" currentDay={currentDay} setModalShow={setDailyViewShow} />
-                                                </div>
-                                            </td>
-                                        );
-                                    })
-                                }
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </Table>
-   
-    )
+        <div className="calendar-grid-container">
+            <h5 key="week-header" className="week-header-card"><i className="bi bi-calendar-check"></i></h5>
+            {headers.map((day, index) => (
+                index < 5 ? (
+                <h5 key={`header-${index}`} className="header-card">{day}</h5>
+                ) : (
+                <h5 key={`header-${index}`} className="weekend-header-card">{day}</h5>
+                )
+            ))}
+
+            {Array.from({ length: totalRows * totalColumns }, (_, cellIndex) => {
+                const columnIndex = cellIndex % totalColumns;
+                const isWeekColumn = columnIndex === 0;
+
+                const rowIndex = Math.floor(cellIndex / totalColumns);
+                const dayIndex = rowIndex * 7 + (columnIndex - 1);
+                const currentDay = dayIndex - startDay + 1;
+
+                const isSaturday = columnIndex === 6;
+                const isSunday = columnIndex === 7;
+
+                if(isWeekColumn) {
+                    const weekNumber = current + rowIndex;
+                    return(
+                        <div key={`week-${cellIndex}`} className="calendar-cell">
+                            <div className="week-card">{weekNumber}</div>
+                        </div>
+                    )
+                }
+
+                if (cellIndex <= emptyStartCells) {
+                    const prevMonthDay = previousMonthDays - (emptyStartCells - cellIndex);
+                    return (
+                        <div key={`prev-${cellIndex}`} className="calendar-cell">
+                            <DayCard className="disabled-card" currentDay={prevMonthDay} />
+                        </div>);
+
+                }
+                
+                if (currentDay > daysInTheMonth) {
+                    const nextMonthDay = currentDay - daysInTheMonth;
+                    return (
+                        <div key={`next-${cellIndex}`} className="calendar-cell">
+                            <DayCard className="disabled-card" currentDay={nextMonthDay} />
+                        </div>
+                    );
+                }
+
+            return (
+                <div key={`current-${cellIndex}`} className="calendar-cell">
+                    <DayCard className="" currentDay={currentDay} setModalShow={setDailyViewShow} isSaturday={isSaturday} isSunday={isSunday}/>
+                </div>
+                );
+            })}
+        </div >
+    );
 }
 
 export default MonthTable;
