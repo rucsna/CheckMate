@@ -1,8 +1,10 @@
 import { useContext, useEffect } from "react";
 import { SettingsContext } from "../../Contexts/SettingsContext";
-import DayCard from "./DayCard";
 import { DateContext } from "../../Contexts/DateContext";
 import { TaskContext } from "../../Contexts/TaskContext";
+import {Card} from "react-bootstrap";
+import DayCard from "./DayCard";
+
 
 
 const MonthTable = () => {
@@ -29,7 +31,7 @@ const MonthTable = () => {
 
     return (
         <div className="calendar-grid-container">
-            <h5 key="week-header" className="week-header-card"><i className="bi bi-calendar-check"></i></h5>
+            <h5 key="week-header" className="week-header-card"></h5>
             {headers.map((day, index) => (
                 index < 5 ? (
                 <h5 key={`header-${index}`} className="header-card">{day}</h5>
@@ -53,7 +55,7 @@ const MonthTable = () => {
                     const weekNumber = current + rowIndex;
                     return(
                         <div key={`week-${cellIndex}`} className="calendar-cell">
-                            <div className="week-card">{weekNumber}</div>
+                            <Card className="week-card">{weekNumber}</Card>
                         </div>
                     )
                 }

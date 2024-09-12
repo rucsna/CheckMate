@@ -11,8 +11,8 @@ const TaskForm = ({ setTodaysTasks }) => {
     const { fetchTasks, fetchTasksByDate } = useContext(TaskContext);
 
     const [task, setTask] = useState("");
-    const [date, setDate] = useState(isToday ? formatDate(currentDate) : `${selectedYear}-${selectedMonth < 10 ? "0" + (Number(selectedMonth) + 1) : Number(selectedMonth) + 1}-${selectedDay}`);
-
+    const [date, setDate] = useState(isToday ? formatDate(currentDate) : formatDate(new Date(selectedYear, selectedMonth, selectedDay)));
+    
 
     const saveTask = async (event) => {
         event.preventDefault();
@@ -45,12 +45,12 @@ const TaskForm = ({ setTodaysTasks }) => {
     };
 
     return (
-        <Form onSubmit={saveTask}>
+        <Form onSubmit={saveTask} className="add-task-form">
             <Form.Group as={Row} className="mb-3" controlId="formTaskName">
-                <Form.Label column sm="2">
+                <Form.Label column sm="1">
                     {labels.task}
                 </Form.Label>
-                <Col sm="10">
+                <Col sm="11">
                     <Form.Control
                         type="text"
                         placeholder={labels.placeholder}
@@ -59,11 +59,12 @@ const TaskForm = ({ setTodaysTasks }) => {
                     />
                 </Col>
             </Form.Group>
+
             <Form.Group as={Row} className="mb-3" controlId="formTaskDate">
-                <Form.Label column sm="2">
+                <Form.Label column sm="1">
                     {labels.date}
                 </Form.Label>
-                <Col sm="10">
+                <Col sm="11">
                     <Form.Control
                         type="date"
                         value={date}
@@ -71,7 +72,12 @@ const TaskForm = ({ setTodaysTasks }) => {
                     />
                 </Col>
             </Form.Group>
-            <Button variant="outline-danger" type="submit" className="shadow-lg"><strong>{labels.save}</strong></Button>
+
+            <Form.Group as={Row} className="mb-3">
+                <Col sm={{span:11,offset:1}} className="text-end">
+                <Button className="add-task-button" type="submit">{labels.save}</Button>
+                </Col>
+            </Form.Group>
         </Form>
     )
 };

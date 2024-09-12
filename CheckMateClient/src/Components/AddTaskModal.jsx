@@ -11,24 +11,23 @@ const AddTaskModal = (props) => {
     return (
         <Modal
             {...props}
-            size="md"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            className="add-task-modal"
+            animation={true}
         >
-            <Modal.Header closeButton>
+            <Modal.Header className="add-task-header" closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    <h1 className="text-success">{labels.newTodoButton}</h1>
+                    <h1>{labels.newTodoButton}</h1>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="bg-success bg-opacity-50">
+            <Modal.Body className="add-task-body">
                 <TaskForm />
             </Modal.Body>
         </Modal>
-    )
+    );
 };
 
-AddTaskModal.propTypes = {
-    props: PropTypes.any
-};
+AddTaskModal.propTypes = {props: PropTypes.any};
 
 export default AddTaskModal;

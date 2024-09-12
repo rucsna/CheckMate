@@ -1,31 +1,52 @@
-import ListGroup from "react-bootstrap/ListGroup";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
 import { DateContext } from "../Contexts/DateContext";
-import NotificationModal from "./NotificationModal";
+import { ListGroup, Form, Button, InputGroup } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-const TaskList = ({ tasks, setTasks, todaysDate }) => {
+
+import DraggableTask from "./DraggableTask";
+import { useDrop } from "react-dnd";
+
+const TaskList = ({ todaysTasks, setTodaysTasks, todaysDate }) => {
+    console.log('tasks', todaysTasks);
     const { formatDate } = useContext(DateContext);
     const { fetchTasks, fetchTasksByDate } = useContext(TaskContext);
 
     const [taskId, setTaskId] = useState(0);
-    const [name, setName] = useState("");
-    const [date, setDate] = useState(null);
+    const [updatedName, setUpdatedName] = useState("");
+    const [updatedDate, setUpdatedDate] = useState(null);
+    
+    
+    const [{ isOver }, drop] = useDrop(() => ({
+        accept: "listGroupItem",
+        drop: (item) => addTaskToCompleted(item.id),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    }));
 
+    const addTaskToCompleted = async (id) => {
+        
+    };
 
-    const handleTask = async (event, id, isCompleted, name, date) => {
+    const handleUpdateClick = (id, updatedDate, updatedName) => {
+        const taskDate = new Date(updatedDate);
+
+        setUpdatedName(updatedName);
+        setUpdatedDate(formatDate(taskDate));
+        setTaskId(id);
+    }
+
+    const handleUpdateTask = async (event, id, isCompleted, name, date) => {
         event.preventDefault();
 
-        const updatedTask = tasks.find(t => t.id === id);
+        const updatedTask = todaysTasks.find(t => t.id === id);
         if (updatedTask) {
             updatedTask.isCompleted = isCompleted;
             updatedTask.name = name;
             updatedTask.date = date;
         }
-        //console.log(updatedTask);
 
         try {
             const response = await fetch(`http://localhost:5295/api/todos/${id}`, {
@@ -33,13 +54,12 @@ const TaskList = ({ tasks, setTasks, todaysDate }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedTask)
             });
-            if (response.ok) {
-                //console.log("task successfully updated");
 
+            if (response.ok) {
                 const updatedResponse = await fetch(`http://localhost:5295/api/todos/${id}`);
                 if (updatedResponse.ok) {
                     const taskData = await updatedResponse.json();
-                    setTasks(prevTasks => prevTasks.map(task => task.id === id ? taskData : task));
+                    setTodaysTasks(prevTasks => prevTasks.map(task => task.id === id ? taskData : task));
                 } else {
                     console.error("error fetching updated task");
                 }
@@ -49,76 +69,80 @@ const TaskList = ({ tasks, setTasks, todaysDate }) => {
         } catch (error) {
             console.error("internal server error", error);
         }
-        
+
         setTaskId(-1);
         //fetchTasksByDate(todaysDate, setTasks);
         fetchTasks();
     };
 
 
-    const handleUpdate = (id, date, name) => {
-        const taskDate = new Date(date);
-
-        setName(name);
-        setDate(formatDate(taskDate));
-        setTaskId(id);
-    }
-
-    const handleDelete = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:5295/api/todos/${id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            if (response.ok) {
-                fetchTasksByDate(todaysDate, setTasks);
-            } else {
-                console.error("error deleting task", response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error("internal server error", error);
-        }
-        fetchTasks();
-    };
-
     return (
-        <ListGroup>
-            {tasks && tasks.map((task) => (
-                taskId !== task.id ? (
-                    <ListGroup.Item key={task.id}>
-                        <Form className="d-flex align-items-center justify-content-center">
-                            <Form.Check
-                                type="checkbox"
-                                id={`task-${task.id}`}
-                                label={task.name}
-                                checked={task.isCompleted}
-                                onChange={(e) => handleTask(e, task.id, !task.isCompleted, task.name, task.date)}
+
+        <div className="task-lists-container">
+
+            <div className="task-list">
+                <h3>Incomplete tasks</h3>
+                <ListGroup key="incomplete-tasks" className="task-list-group mb-4">
+                    {todaysTasks.filter(task => !task.isCompleted).map(task => (
+                        taskId !== task.id ? (
+                            <DraggableTask
+                                key={task.id}
+                                id={task.id}
+                                name={task.name}
+                                isCompleted={task.isCompleted}
+                                labelClassName={"task-incomplete"}
+                                date={task.date}
+                                handleUpdateClick={handleUpdateClick}
+                                handleUpdateTask={handleUpdateTask}
+                                todaysDate={todaysDate}
                             />
-                            <Button variant="link" className="ms-auto" onClick={() => handleUpdate(task.id, task.date, task.name)}><i className="bi bi-pencil-square"></i></Button>
-                            <NotificationModal handleDelete={handleDelete} taskId={task.id}/>
-                        </Form>
-                    </ListGroup.Item>
-                ) : (
-                    <ListGroup.Item key={task.id} className="task-update-form-control">
-                        <Form onSubmit={(e) => handleTask(e, task.id, task.isCompleted, name, date)} className="d-flex align-items-center justify-content-center">
-                            <InputGroup className="mb-3">
-                                <Form.Control className="text-warning-emphasis task-update-form-control"
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)} />
-                                <Form.Control className="text-warning-emphasis task-update-form-control"
-                                    type="date"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)} />
-                                <Button variant="outline-light" className="text-warning-emphasis" type="submit"><i className="bi bi-floppy"></i></Button>
-                                <Button variant="outline-light" className="text-warning-emphasis" onClick={() => setTaskId(-1)} aria-label="close"><i className="bi bi-x-lg"></i></Button>
-                            </InputGroup>
-                        </Form>
-                    </ListGroup.Item>
-                )
-            ))}
-        </ListGroup>
-    )
+                        ) : (
+                            <ListGroup.Item key={task.id}>
+                                <Form onSubmit={(e) => handleUpdateTask(e, task.id, task.isCompleted, updatedName, updatedDate)} className="task-update-form-control d-flex align-items-center justify-content-center ms-3 mt-2 me-3">
+                                    <InputGroup className="mb-3">
+                                        <Form.Control className="task-update-form-control"
+                                            type="text"
+                                            value={updatedName}
+                                            onChange={(e) => setUpdatedName(e.target.value)} />
+                                        <Form.Control className="task-update-form-control"
+                                            type="date"
+                                            value={date}
+                                            onChange={(e) => setUpdatedDate(e.target.value)} />
+                                        <Button variant="link" type="submit"><i className="bi bi-floppy"></i></Button>
+                                        <Button variant="link" onClick={() => setTaskId(-1)} aria-label="close"><i className="bi bi-x-lg"></i></Button>
+                                    </InputGroup>
+                                </Form>
+                            </ListGroup.Item>))
+                    )}
+                </ListGroup>
+            </div>
+
+            <div className="task-list" ref={drop}>
+                <h3>Completed tasks</h3>
+                <ListGroup className="task-list-group">
+                    {todaysTasks.filter(task => task.isCompleted).map((task) => (
+                        <DraggableTask
+                            key={task.id}
+                            id={task.id}
+                            name={task.name}
+                            isCompleted={task.isCompleted}
+                            labelClassName={"task-complete"}
+                            date={task.date}
+                            handleUpdateClick={handleUpdateClick}
+                            handleUpdateTask={handleUpdateTask}
+                            todaysDate={todaysDate}
+                        />
+                    ))}
+                </ListGroup>
+            </div>
+        </div>
+    );
+};
+
+TaskList.propTypes = {
+    todaysTasks: PropTypes.array,
+    setTodaysTasks: PropTypes.func.isRequired,
+    todaysDate: PropTypes.string.isRequired
 };
 
 export default TaskList;

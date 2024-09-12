@@ -1,7 +1,8 @@
 import { useEffect, useContext } from "react";
-import { DateContext } from "../Contexts/DateContext";
-import { SettingsContext } from "../Contexts/SettingsContext";
-import MonthTable from "../Components/MonthlyView/MonthTable";
+import { DateContext } from "../../Contexts/DateContext";
+import { SettingsContext } from "../../Contexts/SettingsContext";
+import MonthTable from "../../Components/MonthlyView/MonthTable";
+import "../MonthlyView/MonthlyView.css";
 
 
 const MonthlyView = () => {
