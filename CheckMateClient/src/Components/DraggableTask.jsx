@@ -3,7 +3,7 @@ import NotificationModal from "./NotificationModal";
 import { useDrag } from "react-dnd";
 import { useContext, useState } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
-const apiUrl = process.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const DraggableTask = ({ id, name, isCompleted, date, handleUpdateClick, handleUpdateTask, labelClassName }) => {
     const {fetchTasks} = useContext(TaskContext);
