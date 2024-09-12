@@ -1,0 +1,13 @@
+{
+    "newTodoButton": "New todo",
+    "todaysTasks": "Today's tasks",
+    "settings": "Settings",
+    "weekStartM": "Week starts with Monday",
+    "weekStartS": "Week starts with Sunday",
+    "chooseLanguage": "Select language",
+    "task": "Task",
+    "date": "Date",
+    "save": "Save",
+    "placeholder": "Enter your todo here...",
+    "notification": "Are you sure you want to delete this task?"
+}

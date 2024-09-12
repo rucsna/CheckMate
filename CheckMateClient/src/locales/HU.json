@@ -1,0 +1,13 @@
+{
+    "newTodoButton": "Új feladat",
+    "todaysTasks": "Feladatok mára",
+    "settings": "Beállítások",
+    "weekStartM": "Hétfővel kezdődjön a hét",
+    "weekStartS": "Vasárnappal kezdődjön a hét",
+    "chooseLanguage": "Válassz nyelvet",
+    "task": "Feladat",
+    "date": "Dátum",
+    "save": "Mentés",
+    "placeholder": "Írd ide a teendődet...",
+    "notification": "Biztos, hogy törölni szeretnéd ezt a feladatot?"
+}
