@@ -3,7 +3,7 @@ import NotificationModal from "./NotificationModal";
 import { useDrag } from "react-dnd";
 import { useContext, useState } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
-
+const apiUrl = process.env.API_URL;
 
 const DraggableTask = ({ id, name, isCompleted, date, handleUpdateClick, handleUpdateTask, labelClassName }) => {
     const {fetchTasks} = useContext(TaskContext);
@@ -19,7 +19,7 @@ const DraggableTask = ({ id, name, isCompleted, date, handleUpdateClick, handleU
 
     const handleDelete = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5295/api/todos/${id}`, {
+            const response = await fetch(`${apiUrl}/todos/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });
