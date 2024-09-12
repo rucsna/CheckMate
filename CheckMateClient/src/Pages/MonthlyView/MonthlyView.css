@@ -1,0 +1,152 @@
+/* General grid stylings */
+.table-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+}
+
+.calendar-grid-container {
+    display: grid;
+    grid-template-columns: 50px repeat(7, minmax(100px, 1fr));
+    gap: 4px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+
+/* Headers */
+.header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 5px 10px 24px;
+}
+
+.weekend-header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f2e091;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    font-weight: bold;
+    padding: 8px;
+    border: 1px solid #3a405a;
+    border-radius: 12px;
+    box-shadow: 5px 10px 24px;
+}
+
+.week-header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 50px;
+    width: 100%;
+}
+
+
+/*Calendar cells*/
+.calendar-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Week card */
+.week-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+    max-width: 50px;
+    width: 100%;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    font-weight: bold;
+    background-color: #7aba78;
+    border: none;
+    box-shadow: 5px 10px 24px;
+}
+
+
+/* Day card */
+.day-card {
+    height: 100%;
+    width: 100%;
+    max-width: 180px;
+    max-height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #f6e9b2;
+    color: #3a405a;
+    text-shadow: #3a405a;
+    border: 2px solid #3a405a;
+    box-shadow: 10px 10px 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.day-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 12px 24px;
+}
+
+
+/* Disabled day card - previous and next month */
+.day-card.disabled-card {
+    background-color: #f3f3e7;
+    color: #a9a9c7 !important;
+    text-shadow: none;
+    opacity: 0.6;
+    border-color: #f3f3e7;
+    transition: none !important;
+}
+
+
+/* Current day styling */
+.background-today {
+    background-color: #f3ca52;
+}
+
+.text-today {
+    color: #3a405a;
+    font-weight: bold;
+}
+
+
+/* Weekend styling */
+.background-weekend {
+    background-color: #f2e091;
+}
+
+.text-weekend {
+    color: #880d1e;
+}
+
+
+/* Badges */
+.badge {
+    color: #3a405a;
+}
+
+.finished-badge {
+    background-color: #7aba78 !important;
+}
+
+.unfinished-badge {
+    background-color: #880d1e !important;
+    color: #f6e9b2 !important;
+}
