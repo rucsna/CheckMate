@@ -1,0 +1,96 @@
+/* Daily View settings */
+.daily-view-modal {
+    border: 1px solid #3a405a;
+    box-shadow: 10px 10px 24px;
+}
+
+.daily-view-modal .modal-dialog {
+    max-width: 800px;
+}
+
+.daily-view-modal .modal-content {
+    transition: all 0.3s ease;
+    background-color: #0a6847;
+}
+
+.modal-backdrop {
+    opacity: 0.75 !important;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.daily-view-title {
+    color: #f3ca52;
+    text-shadow: 10px 2px 8px #3a405a;
+}
+
+.daily-view-body {
+    background-color: #f6e9b2;
+    text-align: center;
+}
+
+.daily-view-body h3 {
+    color: #0a6847;
+    font-weight: 500;
+    text-shadow: 2px 2px 8px #3a405a;
+}
+
+
+/* Add task alert */
+.daily-view-alert {
+    background-color: #a4cea1;
+}
+
+.new-todo-button {
+    background-color: #f3ca52; 
+    color: #3a405a;
+    border: 1px solid #3a405a;
+    box-shadow: 10px 10px 24px #3a405a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.new-todo-button:hover {
+    transform: scale(1.06);
+    background-color: #3a405a;
+    color: #f3ca52;
+    box-shadow: 10px 12px 24px #7aba78; 
+}
+
+/* Task list */
+.task-lists-container {
+    display: flex;
+    gap: 20px;
+}
+
+.task-list {
+    flex: 1;
+}
+
+.task-list-group {
+    background-color: #f6e9b2;
+    color: #3a405a;
+    border: 2px solid #3a405a;
+}
+
+.task-incomplete h5{
+    font-weight: bold;
+}
+
+.task-complete {
+    text-decoration: line-through;
+}
+
+
+.task-update-form-control {
+    border: none;
+    background-color: #f6e9b2;
+    color: #3a405a;
+}
+
+.form-control-warning-outline:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+.form-control-warning-outline::placeholder {
+    color: #ffc107;
+}
