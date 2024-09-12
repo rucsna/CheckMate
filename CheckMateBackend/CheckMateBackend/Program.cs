@@ -1,8 +1,9 @@
 using CheckMateBackend;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Data Source=todo.db";
+var connectionString = builder.Configuration.GetConnectionString("Todos");
 
 builder.Services.AddCors(options =>
 {
@@ -31,6 +32,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
+        var dbContext = services.GetRequiredService<TodoDb>();
+        dbContext.Database.Migrate();
         DatabaseSeeder.Initialize(services);
     }
     catch (Exception e)
