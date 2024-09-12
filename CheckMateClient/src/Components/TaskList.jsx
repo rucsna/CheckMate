@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 import DraggableTask from "./DraggableTask";
 import { useDrop } from "react-dnd";
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.VITE_API_URL;
 
 const TaskList = ({ todaysTasks, setTodaysTasks, todaysDate }) => {
     console.log('tasks', todaysTasks);

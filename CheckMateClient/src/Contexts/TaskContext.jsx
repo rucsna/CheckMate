@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { DateContext } from "./DateContext";
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.VITE_API_URL;
 
 export const TaskContext = createContext();
 

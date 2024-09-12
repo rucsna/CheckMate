@@ -3,7 +3,7 @@ import { DateContext } from "../Contexts/DateContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { TaskContext } from "../Contexts/TaskContext";
 import { Form, Row, Col, Button } from "react-bootstrap";
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.VITE_API_URL;
 
 const TaskForm = ({ setTodaysTasks }) => {
     const { currentDate, formatDate, isToday, selectedYear, selectedMonth, selectedDay } = useContext(DateContext);
