@@ -1,48 +1,39 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Footer from "../Components/Footer";
-import NavItem from "react-bootstrap/esm/NavItem";
-import { useContext } from "react";
-import { StateContext } from "../StateContext";
-import Button from "react-bootstrap/esm/Button";
+import { useContext, useState } from "react";
+import { TaskContext } from "../Contexts/TaskContext";
+import DailyView from "./DailyView";
+import AddTaskModal from "../Components/AddTaskModal";
+import Footer from "../Components/Layout/Footer";
 import CurrentTaskDisplayer from "../Components/CurrentTaskDisplayer";
+import PropTypes from "prop-types";
+import NavBar from "../Components/Layout/NavBar";
 
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const Layout = ({ children }) => {
+  const { dailyViewShow, setDailyViewShow } = useContext(TaskContext);
 
-
-const Layout = ({ children, handleMonthChange }) => {
-  const { currentDate, selectedMonth, setIsToday } = useContext(StateContext);
-
-
-  const handleClick = () => {
-    setIsToday(true);
-    children.setDailyViewShow(true);
-  };
+  const [addTaskShow, setAddTaskShow] = useState(false);
 
 
   return (
-    <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-      <Nav className="bg-info flex-column">
-        <div className="d-flex align-items-center">
-          <NavItem className="ms-5 mt-2"><h1>{currentDate.getFullYear()}</h1></NavItem>
-          <Button variant="warning" className="ms-auto me-4 mt-4 text-primary shadow" onClick={() => children.setAddTaskShow(true)}>New todo</Button>
-          <Button className="me-5 mt-4 shadow" onClick={handleClick}>Today</Button>
-        </div>
-        <NavDropdown className="ms-5" title={selectedMonth} id="month-dropdown" onSelect={handleMonthChange}>
-          {months.map((month, index) => (
-            <NavDropdown.Item className="bg-info" key={index} eventKey={index}>{month}</NavDropdown.Item>
-          ))}
-        </NavDropdown>
-      </Nav>
-      <CurrentTaskDisplayer />
-      <div className="flex-grow">
-      {children.component}
-      </div>
-      <Footer setStartDay={children.setStartDay}/>
-    </Container>
+    <div className="layout-container">
+      <header>
+        <NavBar setAddTaskShow={setAddTaskShow}/>
+      </header>
+
+      <main>
+        <CurrentTaskDisplayer />
+        {children}
+        <DailyView show={dailyViewShow} onHide={() => setDailyViewShow(false)} />
+        <AddTaskModal show={addTaskShow} onHide={() => setAddTaskShow(false)} />
+      </main>
+
+      <Footer />
+    </div >
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.any,
 };
 
 export default Layout;

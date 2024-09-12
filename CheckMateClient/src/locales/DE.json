@@ -1,0 +1,13 @@
+{
+    "newTodoButton": "Neue Aufgabe",
+    "todaysTasks": "Aufgaben für heute",
+    "settings": "Einstellungen",
+    "weekStartM": "Woche beginnt mit Montag",
+    "weekStartS": "Woche beginnt mit Sonntag",
+    "chooseLanguage": "Sprache auswählen",
+    "task": "Aufgabe",
+    "date": "Datum",
+    "save": "Speichern",
+    "placeholder": "Aufgabe eingeben...",
+    "notification": "Möchten Sie diese Aufgabe wirklich löschen?"
+}
