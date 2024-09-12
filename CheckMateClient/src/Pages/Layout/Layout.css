@@ -1,0 +1,88 @@
+/* Layout general */
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout-container main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.layout-container footer {
+    flex-shrink: 0;
+    height: 100px;
+    background-color: #0a6847;
+}
+
+
+/* Navigation bar */
+.navigation-bar {
+    background-color: #0a6847;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.left-section .right-section {
+    display: flex;
+    align-items: center;
+}
+
+.navigation-card {
+    background-color: #f3ca52;
+    color: #3a405a;
+    font-weight: bold;
+    border: 1px solid #f3ca52;
+    box-shadow: 10px 10px 24px;
+}
+
+.navigation-card .dropdown-title {
+    color: #3a405a;
+    font-weight: bold;
+}
+
+.month-dropdown .dropdown-menu {
+    background-color: #7aba78;
+}
+
+.month-dropdown .dropdown-toggle {
+    color: #3a405a;
+}
+
+.month-dropdown .dropdown-item {
+    color: #3a405a;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.month-dropdown .dropdown-item:hover {
+    background-color: #3a405a;
+    color: #f6e9b2;
+}
+
+.month-dropdown .dropdown-item.active {
+    background-color: #3a405a;
+    color: #f6e9b2;
+    font-weight: bolder;
+}
+
+.nav-button {
+    background-color: #3a405a;
+    color: #f3ca52;
+    font-weight: bold;
+    border: #3a405a;
+    box-shadow: 10px 10px 24px #3a405a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-button:hover {
+    transform: scale(1.06);
+    background-color: #f3ca52;
+    color: #3a405a;
+    box-shadow: 10px 12px 24px #7aba78; 
+}
