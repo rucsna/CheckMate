@@ -1,11 +1,12 @@
 import { useContext, useState } from "react";
-import { TaskContext } from "../Contexts/TaskContext";
-import DailyView from "./DailyView";
-import AddTaskModal from "../Components/AddTaskModal";
-import Footer from "../Components/Layout/Footer";
-import CurrentTaskDisplayer from "../Components/CurrentTaskDisplayer";
+import { TaskContext } from "../../Contexts/TaskContext";
+import DailyView from "../DailyView/DailyView";
+import AddTaskModal from "../../Components/AddTaskModal";
+import Footer from "../../Components/Layout/Footer";
+import CurrentTaskDisplayer from "../../Components/CurrentTaskDisplayer";
 import PropTypes from "prop-types";
-import NavBar from "../Components/Layout/NavBar";
+import NavBar from "../../Components/Layout/NavBar";
+import "../Layout/Layout.css";
 
 
 const Layout = ({ children }) => {

@@ -1,6 +1,6 @@
 import './App.css';
-import MonthlyView from './Pages/MonthlyView';
-import Layout from './Pages/Layout';
+import MonthlyView from './Pages/MonthlyView/MonthlyView';
+import Layout from './Pages/Layout/Layout';
 import { DateProvider } from './Contexts/DateContext';
 import { TaskProvider } from './Contexts/TaskContext';
 import { SettingsProvider } from './Contexts/SettingsContext';

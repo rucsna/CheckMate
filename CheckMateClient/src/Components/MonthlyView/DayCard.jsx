@@ -52,7 +52,7 @@ const DayCard = ({ currentDay, setModalShow, className, isSaturday, isSunday }) 
     <Card className={`day-card ${todayClass} ${weekendClass} ${className} text-center`}>
       <Card.Body onClick={handleClick}>
         <Card.Title>
-          <h1 className={`${!isDisabled && currentDateAsString === selectedDateAsString ? "text-today" : ""}`}>{currentDay}</h1>
+          <h1 className={`${!isDisabled && currentDateAsString === selectedDateAsString ? "text-today" : !isDisabled && isSunday ? "text-weekend" : ""}`}>{currentDay}</h1>
         </Card.Title>
 
         <div className="d-flex">
