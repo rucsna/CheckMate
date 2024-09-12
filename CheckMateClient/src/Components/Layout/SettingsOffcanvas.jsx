@@ -23,7 +23,7 @@ const SettingsOffcanvas = () => {
 
     return(
         <div>
-        <Button className="nav-button me-4" onClick={() => setShow(true)}><i className="bi bi-gear"></i></Button>
+        <Button size="lg" className="nav-button me-4" onClick={() => setShow(true)}><i className="bi bi-gear"></i></Button>
         <Offcanvas show={show} onHide={() => setShow(false)} className="bg-secondary bg-opacity-75 text-warning">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>{labels.settings}</Offcanvas.Title>
