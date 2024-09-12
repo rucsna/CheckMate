@@ -3,7 +3,7 @@ import { DateContext } from "../Contexts/DateContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { TaskContext } from "../Contexts/TaskContext";
 import { Form, Row, Col, Button } from "react-bootstrap";
-
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const TaskForm = ({ setTodaysTasks }) => {
     const { currentDate, formatDate, isToday, selectedYear, selectedMonth, selectedDay } = useContext(DateContext);
@@ -24,7 +24,7 @@ const TaskForm = ({ setTodaysTasks }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:5295/api/todos', {
+            const response = await fetch(`${apiUrl}/todos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newTask)

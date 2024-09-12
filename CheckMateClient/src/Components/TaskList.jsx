@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 import DraggableTask from "./DraggableTask";
 import { useDrop } from "react-dnd";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const TaskList = ({ todaysTasks, setTodaysTasks, todaysDate }) => {
     console.log('tasks', todaysTasks);
@@ -49,14 +50,14 @@ const TaskList = ({ todaysTasks, setTodaysTasks, todaysDate }) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5295/api/todos/${id}`, {
+            const response = await fetch(`${apiUrl}/todos/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedTask)
             });
 
             if (response.ok) {
-                const updatedResponse = await fetch(`http://localhost:5295/api/todos/${id}`);
+                const updatedResponse = await fetch(`${apiUrl}/todos/${id}`);
                 if (updatedResponse.ok) {
                     const taskData = await updatedResponse.json();
                     setTodaysTasks(prevTasks => prevTasks.map(task => task.id === id ? taskData : task));

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { DateContext } from "./DateContext";
-
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const TaskContext = createContext();
 
@@ -14,7 +14,7 @@ export const TaskProvider = ({ children }) => {
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${selectedMonth + 1}`);
+            const response = await fetch(`${apiUrl}/todos/${selectedYear}/${selectedMonth + 1}`);
             if (!response.ok) {
                 throw new Error("Problem with network response");
             }
@@ -35,7 +35,7 @@ export const TaskProvider = ({ children }) => {
 
     const fetchTasksByDate = async (date, setter) => {
         try {
-            const response = await fetch(`http://localhost:5295/api/todos/${date}`);
+            const response = await fetch(`${apiUrl}/todos/${date}`);
             if (!response.ok) {
                 throw new Error("Problem with network response");
             }
