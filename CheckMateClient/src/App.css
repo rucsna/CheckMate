@@ -1,10 +1,25 @@
 body, html {
-    height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #7aba78;
+    background-color: #f6e9b2;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-container {
+    max-width: 1200px;
+    width: 100%;
+    background-color: #7aba78;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+@media (min-width: 1200px) {
+    .app-container {
+        margin: 0 20px;
+    }
 }
 
 /* Daily task displaying carousel */
