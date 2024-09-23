@@ -86,3 +86,40 @@
     color: #3a405a;
     box-shadow: 10px 12px 24px #7aba78; 
 }
+
+
+/* Offcanvas */
+.offcanvas-background {
+    background-color: #f6e9b2;
+    opacity: 0.8;
+    box-shadow: 10px 10px 24px #3a405a;
+    border: #3a405a;
+}
+
+.offcanvas-title {
+    color: #3a405a;
+    opacity: 1;
+    text-shadow: 10px 4px 16px #7aba78;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.offcanvas-background .offcanvas-body .list-group {
+    opacity: 1;
+    box-shadow: 10px 10px 24px #3a405a;
+}
+
+.offcanvas-list {
+    background-color: #7aba78;
+    color: #3a405a;
+    box-shadow: 10px 10px 24px #3a405a;
+}
+
+.offcanvas-switch {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.offcanvas-switch:hover {
+    transform: scale(1.03);
+    box-shadow: 4px 6px 12px #7aba78; 
+}

@@ -18,31 +18,38 @@ const SettingsOffcanvas = () => {
     const [show, setShow] = useState(false);
 
     const handleWeekStartChange = () => {
-        setWeekStart(prevStart => prevStart === "M" ? "S" : "M");
+        setWeekStart(prevStart => prevStart === "Monday" ? "Sunday" : "Monday");
     };
+
 
     return(
         <div>
         <Button size="lg" className="nav-button me-4" onClick={() => setShow(true)}><i className="bi bi-gear"></i></Button>
-        <Offcanvas show={show} onHide={() => setShow(false)} className="bg-secondary bg-opacity-75 text-warning">
-                <Offcanvas.Header closeButton>
+        <Offcanvas show={show} onHide={() => setShow(false)} className="offcanvas-background">
+                <Offcanvas.Header className="offcanvas-title" closeButton>
                     <Offcanvas.Title>{labels.settings}</Offcanvas.Title>
                 </Offcanvas.Header>
 
                 <Offcanvas.Body>
-                    <ListGroup >
-                        <ListGroup.Item className="bg-warning bg-opacity-50">
+                    <ListGroup>
+                        <ListGroup.Item className="offcanvas-list">{labels.weekStartLabel}
+                            {[labels.Monday, labels.Sunday].map((label, index) => (
                             <FormCheck
-                                type="switch"
+                                className="offcanvas-switch"
+                                key={index}
+                                type="radio"
                                 id="week-start-switch"
-                                label={weekStart === "M" ? `${labels.weekStartM}` : `${labels.weekStartS}`}
-                                checked={weekStart !== "M"}
-                                onChange={handleWeekStartChange}></FormCheck>
+                                label={label}
+                                checked={labels[label] === weekStart}
+                                onChange={handleWeekStartChange}>
+
+                            </FormCheck>))}
                         </ListGroup.Item>
 
-                        <ListGroup.Item className="bg-warning bg-opacity-50">{labels.chooseLanguage}
+                        <ListGroup.Item className="offcanvas-list">{labels.chooseLanguage}
                             {Object.entries(languageOptions).map(([code, label]) => (
                                 <FormCheck
+                                    className="offcanvas-switch"
                                     key={code}
                                     type="radio"
                                     id={code}
