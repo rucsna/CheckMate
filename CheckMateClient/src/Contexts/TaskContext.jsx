@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import { DateContext } from "./DateContext";
 
 
@@ -8,11 +8,10 @@ export const TaskProvider = ({ children }) => {
     const { selectedYear, selectedMonth } = useContext(DateContext);
 
     const [tasks, setTasks] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [showToast, setShowToast] = useState(false);
     const [dailyViewShow, setDailyViewShow] = useState(false);
 
-    const fetchTasks = async () => {
+
+    const loadTasksForMonth = useCallback(async () => {
         try {
             const response = await fetch(`http://localhost:5295/api/todos/${selectedYear}/${selectedMonth + 1}`);
             if (!response.ok) {
@@ -20,47 +19,24 @@ export const TaskProvider = ({ children }) => {
             }
             const taskData = await response.json();
             if (taskData) {
-                console.log(taskData);
                 setTasks(taskData);
             } else {
                 //setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
                 //setShowToast(true);
             }
         } catch (error) {
-            // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
-            // setShowToast(true);
-            console.error(error);
+            console.error("Failed to load tasks: ", error);
         }
-    };
+    }, [selectedYear, selectedMonth]);
 
-    const fetchTasksByDate = async (date, setter) => {
-        try {
-            const response = await fetch(`http://localhost:5295/api/todos/${date}`);
-            if (!response.ok) {
-                throw new Error("Problem with network response");
-            }
-            const taskData = await response.json();
-            console.log(taskData);
-            setter(taskData);
-            // } else{
-            //     // setErrorMessage("Your tasks couldn't be loaded, please contact the site manager");
-            //     // setShowToast(true);
-            //}
-        } catch (error) {
-            // setErrorMessage("An unexpected error occured, we are already working on the solution. Please, check back later");
-            // setShowToast(true);
-            // console.error(error);
-        }
-    };
-
+    
     useEffect(() => {
-        fetchTasks(setTasks, selectedYear, selectedMonth);
-        setShowToast(false);
-    }, [selectedMonth, selectedYear]);
+        loadTasksForMonth();
+    }, [loadTasksForMonth]);
 
 
     return (
-        <TaskContext.Provider value={{ tasks, fetchTasks, fetchTasksByDate, dailyViewShow, setDailyViewShow }}>
+        <TaskContext.Provider value={{ tasks, setTasks, dailyViewShow, setDailyViewShow }}>
             {children}
         </TaskContext.Provider>
     );

@@ -1,59 +1,29 @@
 import { createContext, useState, useEffect } from "react";
-
-const languageSettings = {
-    "GB": "en-GB",
-    "DE": "de-DE",
-    "HU": "hu-HU",
-    "KR": "ko-KR"
-};
-
-const getWeekDaysArray = (locale) => {
-    var baseDate = new Date(Date.UTC(2017, 0, 1));
-    var weekDays = [];
-    for (var i = 0; i < 7; i++) {
-        weekDays.push(baseDate.toLocaleDateString(locale, { weekday: 'long' }).toUpperCase());
-        baseDate.setDate(baseDate.getDate() + 1);
-    }
-    return weekDays;
-};
-
-const getMonthNamesArray = (locale) => {
-    var baseDate = new Date(Date.UTC(2017, 0, 1));
-    var months = [];
-    for (var i = 0; i < 12; i++) {
-        months.push(baseDate.toLocaleDateString(locale, { month: 'long' }));
-        baseDate.setMonth(baseDate.getMonth() + 1);
-    }
-    return months;
-};
-
-const changeLanguage = async (lang, daySetter, monthSetter, labelSetter, locSetter) => {
-    const loc = languageSettings[lang] || "en-GB";
-    locSetter(loc);
-    const labelLang = languageSettings[lang] ? lang : "GB";
-
-    daySetter(getWeekDaysArray(loc));
-    monthSetter(getMonthNamesArray(loc));
-    labelSetter(await loadLabels(labelLang));
-};
-
-const loadLabels = async (languageCode) => {
-    const labels = await import(`./../locales/${languageCode}.json`);
-    return labels.default;
-};
+import {getMonthNamesArray, getWeekDaysArray, loadLabels } from "../library/languageUtils.js"; 
+import { LANGUAGE_OPTIONS, INITIAL_LANGUAGE } from "../library/constants";
 
 
 export const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
-    const [weekStart, setWeekStart] = useState("M");
-    const [language, setLanguage] = useState("GB");
+    const [weekStart, setWeekStart] = useState("Monday");
+    const [language, setLanguage] = useState(INITIAL_LANGUAGE.slice(-2));
     const [weekDays, setWeekDays] = useState([]);
     const [monthNames, setMonthNames] = useState([]);
     const [labels, setLabels] = useState({});
-    const [locale, setLocale] = useState("en-GB");
+    const [locale, setLocale] = useState(INITIAL_LANGUAGE);
 
     useEffect(() => {
+        const changeLanguage = async (lang, daySetter, monthSetter, labelSetter, locSetter) => {
+            const loc = LANGUAGE_OPTIONS[lang] || INITIAL_LANGUAGE;
+            locSetter(loc);
+            const labelLang = LANGUAGE_OPTIONS[lang] ? lang : INITIAL_LANGUAGE.slice(-2);
+
+            daySetter(getWeekDaysArray(loc));
+            monthSetter(getMonthNamesArray(loc));
+            labelSetter(await loadLabels(labelLang));
+        };
+
         changeLanguage(language, setWeekDays, setMonthNames, setLabels, setLocale);
     }, [language]);
 
