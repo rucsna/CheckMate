@@ -5,14 +5,15 @@ import { TaskContext } from "../../Contexts/TaskContext";
 import { Nav, NavDropdown, Card, Button } from "react-bootstrap";
 import SettingsOffcanvas from "./SettingsOffcanvas";
 import PropTypes from "prop-types";
+import { CURRENT_DATE } from "../../library/constants.js";
 
 
 const NavBar = ({ setAddTaskShow }) => {
-    const { currentDate, selectedMonth, setIsToday, setSelectedMonth, setSelectedYear, setSelectedDay, selectedYear, handleMonthChange } = useContext(DateContext);
+    const { selectedMonth, setIsToday, setSelectedMonth, setSelectedYear, setSelectedDay, selectedYear, handleMonthChange } = useContext(DateContext);
     const { monthNames, labels } = useContext(SettingsContext);
     const { setDailyViewShow } = useContext(TaskContext);
 
-    const [dropdownSelectedMonth, setDropdownSelectedMonth] = useState(currentDate.getMonth());
+    const [dropdownSelectedMonth, setDropdownSelectedMonth] = useState(CURRENT_DATE.getMonth());
     const [isLeftDisabled, setIsLeftDisabled] = useState(false);
     const [isRightDisabled, setIsRightDisabled] = useState(false);
 
@@ -24,15 +25,15 @@ const NavBar = ({ setAddTaskShow }) => {
 
     const handleYearChange = (step) => {
         const newYear = Number(selectedYear) + step;
-        const minYear = currentDate.getFullYear() - 100;
-        const maxYear = currentDate.getFullYear() + 100;
+        const minYear = CURRENT_DATE.getFullYear() - 100;
+        const maxYear = CURRENT_DATE.getFullYear() + 100;
 
         setIsLeftDisabled(newYear <= minYear);
         setIsRightDisabled(newYear >= maxYear);
 
         setSelectedYear(newYear);
         handleMonthChange(selectedMonth, newYear);
-    }
+    };
 
     const handleYearLeftClick = () => {
         handleYearChange(-1);
@@ -45,13 +46,12 @@ const NavBar = ({ setAddTaskShow }) => {
 
     const setBackToday = () => {
         // sets back the selected date states to current date
-        setSelectedYear(currentDate.getFullYear());
-        setSelectedMonth(currentDate.getMonth());
-        setSelectedDay(currentDate.getDate());
+        setSelectedYear(CURRENT_DATE.getFullYear());
+        setSelectedMonth(CURRENT_DATE.getMonth());
+        setSelectedDay(CURRENT_DATE.getDate());
 
         // sets back the dropdown to show the current month
-        setDropdownSelectedMonth(currentDate.getMonth());
-        handleMonthChange(currentDate.getMonth());
+        handleDropdown(CURRENT_DATE.getMonth());
 
         // shows daily view
         setIsToday(true);

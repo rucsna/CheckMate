@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { DateContext } from '../Contexts/DateContext';
 import { TaskContext } from '../Contexts/TaskContext';
 import {Carousel, Alert, Button} from 'react-bootstrap';
+import { filterDailyTasks } from '../library/taskUtils';
+import { formatDate } from '../library/dateUtils';
+import { CURRENT_DATE } from '../library/constants';
 
 
 const CurrentTaskDisplayer = () => {
-  const { currentDate, formatDate } = useContext(DateContext);
   const { tasks } = useContext(TaskContext);
 
   const [incompleteTasks, setIncompleteTasks] = useState([]);
@@ -13,14 +14,10 @@ const CurrentTaskDisplayer = () => {
 
 
   useEffect(() => {
-    const date = formatDate(currentDate);
-    const filteredTasks = tasks.filter(task => {
-      const taskDate = formatDate(new Date(task.date));
-      return taskDate === date;
-    }).filter(task => !task.isCompleted);
-
+    const date = formatDate(CURRENT_DATE);
+    const filteredTasks = filterDailyTasks(tasks, date, formatDate).filter(task => !task.isCompleted);
     setIncompleteTasks(filteredTasks);
-  }, [currentDate, tasks, formatDate]);
+  }, [CURRENT_DATE, tasks, formatDate]);
 
 
   return (
