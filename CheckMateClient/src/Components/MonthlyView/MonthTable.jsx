@@ -6,7 +6,6 @@ import {Card} from "react-bootstrap";
 import DayCard from "./DayCard";
 
 
-
 const MonthTable = () => {
     const { daysInTheMonth, startDay, setStartDay, weekNumber, selectedYear, selectedMonth, monthLengthCounter } = useContext(DateContext);
     const { weekStart, weekDays } = useContext(SettingsContext);
@@ -16,7 +15,7 @@ const MonthTable = () => {
         if (startDay < 0) setStartDay(6);
     }, [setStartDay, startDay]);
 
-    const headers = weekStart === "M" ? [...weekDays.slice(1), weekDays[0]] : weekDays;
+    const headers = weekStart === "Monday" ? [...weekDays.slice(1), weekDays[0]] : weekDays;
 
     // calculate the cells for the month and set the number of the week for the first column of each row
     const totalCells = daysInTheMonth + startDay;
@@ -33,7 +32,7 @@ const MonthTable = () => {
         <div className="calendar-grid-container">
             <h5 key="week-header" className="week-header-card"></h5>
             {headers.map((day, index) => (
-                index < 5 ? (
+                (weekStart === "Monday" && index < 5) || (weekStart === "Sunday" && index > 0 && index < 6) ? (
                 <h5 key={`header-${index}`} className="header-card">{day}</h5>
                 ) : (
                 <h5 key={`header-${index}`} className="weekend-header-card">{day}</h5>
@@ -48,8 +47,8 @@ const MonthTable = () => {
                 const dayIndex = rowIndex * 7 + (columnIndex - 1);
                 const currentDay = dayIndex - startDay + 1;
 
-                const isSaturday = columnIndex === 6;
-                const isSunday = columnIndex === 7;
+                const isSaturday = weekStart === "Monday" ? columnIndex === 6 : columnIndex === 7;
+                const isSunday = weekStart === "Monday" ? columnIndex === 7 : columnIndex === 1;
 
                 if(isWeekColumn) {
                     const weekNumber = current + rowIndex;
@@ -64,7 +63,7 @@ const MonthTable = () => {
                     const prevMonthDay = previousMonthDays - (emptyStartCells - cellIndex);
                     return (
                         <div key={`prev-${cellIndex}`} className="calendar-cell">
-                            <DayCard className="disabled-card" currentDay={prevMonthDay} />
+                            <DayCard className="disabled-card" currentDay={prevMonthDay} isSunday={isSunday} isSaturday={isSaturday}/>
                         </div>);
 
                 }
@@ -73,7 +72,7 @@ const MonthTable = () => {
                     const nextMonthDay = currentDay - daysInTheMonth;
                     return (
                         <div key={`next-${cellIndex}`} className="calendar-cell">
-                            <DayCard className="disabled-card" currentDay={nextMonthDay} />
+                            <DayCard className="disabled-card" currentDay={nextMonthDay} isSunday={isSunday} isSaturday={isSaturday}/>
                         </div>
                     );
                 }
