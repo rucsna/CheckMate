@@ -31,7 +31,7 @@
 .daily-view-body h3 {
     color: #0a6847;
     font-weight: 500;
-    text-shadow: 2px 2px 8px #3a405a;
+    text-shadow: 2px 2px 8px #7aba78;
 }
 
 
@@ -52,7 +52,7 @@
     transform: scale(1.06);
     background-color: #3a405a;
     color: #f3ca52;
-    box-shadow: 10px 12px 24px #7aba78; 
+    box-shadow: 2px 8px 30px #7aba78; 
 }
 
 /* Task list */
@@ -65,10 +65,21 @@
     flex: 1;
 }
 
-.task-list-group {
+.task-list-incomplete {
     background-color: #f6e9b2;
     color: #3a405a;
-    border: 2px solid #3a405a;
+    border: 2px solid #880d1e;
+}
+
+.task-list-complete {
+    background-color: #f6e9b2;
+    color: #3a405a;
+    border: 2px solid #7aba78;
+}
+
+.drag-and-drop-item {
+    background-color: #f3f3e7;
+    color: #3a405a;
 }
 
 .task-incomplete h5{
@@ -79,18 +90,25 @@
     text-decoration: line-through;
 }
 
-
 .task-update-form-control {
-    border: none;
-    background-color: #f6e9b2;
+    background-color: #f3f3e7;
     color: #3a405a;
 }
 
-.form-control-warning-outline:focus {
-    border-color: #ffc107;
-    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+.save-button {
+    color: #3a405a;
+    background-color: #f3ca52;
+    border: 1px solid #3a405a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-control-warning-outline::placeholder {
-    color: #ffc107;
+.save-button:hover {
+    transform: scale(1.06);
+    background-color: #3a405a;
+    color: #f3ca52;
+    box-shadow: 2px 8px 30px #7aba78;
+}
+
+.close-button {
+    color: #3a405a;
 }

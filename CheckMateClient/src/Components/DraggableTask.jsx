@@ -34,8 +34,8 @@ const DraggableTask = ({ id, name, isCompleted, date, handleUpdateClick, handleU
 
 
     return (
-        <ListGroup.Item ref={drag}>
-            <Form className="task-list-form d-flex align-items-center justify-content-center ms-3 mt-2">
+        <ListGroup.Item ref={drag} className="drag-and-drop-item">
+            <Form className="d-flex align-items-center justify-content-center ms-3 mt-2">
                 <Form.Check
                     type="checkbox"
                     id={`task-${id}`}
@@ -43,7 +43,7 @@ const DraggableTask = ({ id, name, isCompleted, date, handleUpdateClick, handleU
                     checked={isCompleted}
                     onChange={(e) => handleUpdateTask(e, id, !isCompleted, name, date)}
                 />
-                <div className="task-list-buttons ms-auto me-4">
+                <div className="ms-auto me-4">
                     {!isCompleted &&
                     <Button
                         variant="link"
