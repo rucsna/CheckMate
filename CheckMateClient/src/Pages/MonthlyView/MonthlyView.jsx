@@ -11,7 +11,7 @@ const MonthlyView = () => {
 
 
     useEffect(() => {
-        if (weekStart === "M") {
+        if (weekStart === "Monday") {
             setStartDay(startDayIfMonday);
         } else {
             setStartDay(startDayIfSunday);

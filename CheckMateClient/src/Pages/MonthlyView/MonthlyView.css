@@ -1,12 +1,4 @@
-/* General grid stylings */
-.table-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin-bottom: 1rem;
-    overflow-y: auto;
-}
-
+/* General stylings */
 .calendar-grid-container {
     display: grid;
     grid-template-columns: 50px repeat(7, minmax(100px, 1fr));
