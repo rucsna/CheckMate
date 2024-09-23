@@ -3,12 +3,13 @@ import { DateContext } from "../Contexts/DateContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { TaskContext } from "../Contexts/TaskContext";
 import { Form, Row, Col, Button } from "react-bootstrap";
+import { formatDate } from "../library/dateUtils";
 
 
-const TaskForm = ({ setTodaysTasks }) => {
-    const { currentDate, formatDate, isToday, selectedYear, selectedMonth, selectedDay } = useContext(DateContext);
-    const { labels } = useContext(SettingsContext);
-    const { fetchTasks, fetchTasksByDate } = useContext(TaskContext);
+const TaskForm = () => {
+    const { currentDate, isToday, selectedYear, selectedMonth, selectedDay } = useContext(DateContext);
+    const {labels} = useContext(SettingsContext);
+    const { fetchTasks } = useContext(TaskContext);
 
     const [task, setTask] = useState("");
     const [date, setDate] = useState(isToday ? formatDate(currentDate) : formatDate(new Date(selectedYear, selectedMonth, selectedDay)));
@@ -40,7 +41,6 @@ const TaskForm = ({ setTodaysTasks }) => {
         } catch (error) {
             console.error('Internal server error', error);
         }
-        fetchTasksByDate(date, setTodaysTasks);
         fetchTasks();
     };
 
